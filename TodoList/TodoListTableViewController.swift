@@ -22,6 +22,8 @@ class TodoListTableViewController: UITableViewController {
         
     }
     
+    // MARK: - Logic
+    
     func createTodo() -> [ToDo] {
         
         let homework = ToDo()
@@ -44,7 +46,7 @@ class TodoListTableViewController: UITableViewController {
     
 
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -53,7 +55,6 @@ class TodoListTableViewController: UITableViewController {
         return self.TodoList.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
@@ -68,10 +69,44 @@ class TodoListTableViewController: UITableViewController {
         return cell
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let AddToDoVC = segue.destination as! AddToDoViewController
-        AddToDoVC.ToDoListVC = self
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let TodoCell = TodoList[indexPath.row]
+        performSegue(withIdentifier: "showdisplayToDo", sender: TodoCell)
     }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            TodoList.remove(at: indexPath.row)
+            
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.reloadData()
+        }
+    }
+    
+    
+    
+    // MARK: - Segue
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if let AddToDoVC = segue.destination as? AddToDoViewController {
+            AddToDoVC.backToDoListVC = self
+        }
+        
+        if let showDisplayToDoVC = segue.destination as? CompleteToDoViewController {
+            
+            if let todo = sender as? ToDo {
+                showDisplayToDoVC.selectedToDo = todo
+                showDisplayToDoVC.backToDoListVC = self
+            }
+        }
+    }
+    
+    
 
   
 

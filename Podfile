@@ -9,8 +9,15 @@ target 'TodoList' do
 
   pod 'Firebase/Core'
   pod 'Firebase/Database'
+  pod 'FirebaseUI'
+  pod 'FBSDKCoreKit'  
+  pod 'FBSDKLoginKit'
+  pod 'FBSDKShareKit'
+  pod 'FBSDKPlacesKit'
   pod 'GoogleMaps'
   pod 'GooglePlaces'
+  pod 'Alamofire'
+
 
 
 end

@@ -10,7 +10,7 @@ import UIKit
 
 class AddToDoViewController: UIViewController {
     
-    var ToDoListVC = TodoListTableViewController()
+    var backToDoListVC = TodoListTableViewController()
     
     
     @IBOutlet weak var titleTodoTextField: UITextField!
@@ -24,18 +24,30 @@ class AddToDoViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    // MARK: - Logic
+    
+    func addToDodata() {
+        let todo = ToDo()
+        
+        if let titleText = titleTodoTextField.text {
+            
+            todo.name = titleText // ให้ตัวแปร todo มีค่า name = titleTodoTextField
+            todo.important = importantSwitch.isOn // ให้ตัวแปร todo มีค่า Boolean = 1
+            
+            backToDoListVC.TodoList.insert(todo, at: 0)// เพิ่มค่าที่ได้จาก todo เข้าแถวแรกของตัวแปร ToDoList
+            backToDoListVC.tableView.reloadData() // reload table view
+            
+            navigationController?.popViewController(animated: true)
+            
+        }
+    }
+    
+    
+    // MARK: - Interface
+    
     
     @IBAction func addToDobtn(_ sender: Any) {
-        let todo = ToDo()
-        todo.name = titleTodoTextField.text! // ให้ตัวแปร todo มีค่า name = titleTodoTextField
-        todo.important = importantSwitch.isOn // ให้ตัวแปร todo มีค่า Boolean = 1
-
-        ToDoListVC.TodoList.append(todo) // เพิ่มค่าที่ได้จาก todo เข้าตัวแปร ToDoList
-        ToDoListVC.tableView.reloadData() // reload table view
-
-        navigationController?.popViewController(animated: true)
-
-
+        addToDodata()
     }
     
 
