@@ -186,8 +186,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="loginFBButton:" destination="ONn-OL-S4I" eventType="touchUpInside" id="m07-8x-QI3"/>
-                                    <segue destination="w4v-8i-FGX" kind="show" identifier="movetoToDO" id="Cpe-um-eU6"/>
+                                    <action selector="loginFBButton:" destination="ONn-OL-S4I" eventType="touchUpInside" id="qJD-4w-Avd"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -200,6 +199,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bWJ-pZ-RW6"/>
                     </view>
+                    <connections>
+                        <segue destination="w4v-8i-FGX" kind="show" identifier="afterloginFB" id="DCq-1B-zor"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7ff-cJ-XMp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
