@@ -14,11 +14,13 @@ class CompleteToDoViewController: UIViewController {
     var selectedToDo = ToDo()
     
     @IBOutlet weak var titlelabel: UILabel!
+    @IBOutlet weak var location_lbl: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         titlelabel.text = selectedToDo.name
+        location_lbl.text = selectedToDo.location
 
     }
     

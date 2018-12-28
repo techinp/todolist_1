@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ONn-OL-S4I">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="w4v-8i-FGX">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -64,8 +64,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ftf-iS-Cxg">
-                                <rect key="frame" x="16" y="112" width="288" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <rect key="frame" x="30" y="112" width="260" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yV1-Z2-DLF">
@@ -75,15 +75,25 @@
                                     <action selector="completeToDo:" destination="D0S-97-X5i" eventType="touchUpInside" id="GOm-JT-sTn"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ef1-5Z-JY3">
+                                <rect key="frame" x="30" y="145" width="260" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Ftf-iS-Cxg" firstAttribute="leading" secondItem="9H9-JV-c6w" secondAttribute="leading" constant="16" id="9P9-Pe-6hm"/>
+                            <constraint firstItem="Ftf-iS-Cxg" firstAttribute="leading" secondItem="9H9-JV-c6w" secondAttribute="leading" constant="30" id="9P9-Pe-6hm"/>
                             <constraint firstItem="yV1-Z2-DLF" firstAttribute="centerX" secondItem="pwu-5P-OG8" secondAttribute="centerX" id="AvH-lJ-6DE"/>
                             <constraint firstItem="ywk-nG-OcH" firstAttribute="centerX" secondItem="pwu-5P-OG8" secondAttribute="centerX" id="G2e-T7-Ngs"/>
-                            <constraint firstItem="9H9-JV-c6w" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ftf-iS-Cxg" secondAttribute="trailing" constant="16" id="JVk-hG-aaU"/>
+                            <constraint firstItem="9H9-JV-c6w" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ftf-iS-Cxg" secondAttribute="trailing" constant="30" id="JVk-hG-aaU"/>
                             <constraint firstItem="Ftf-iS-Cxg" firstAttribute="top" secondItem="ywk-nG-OcH" secondAttribute="bottom" constant="16" id="PA3-0i-0rh"/>
+                            <constraint firstItem="ef1-5Z-JY3" firstAttribute="top" secondItem="Ftf-iS-Cxg" secondAttribute="bottom" constant="16" id="Yqu-iP-tHd"/>
                             <constraint firstItem="Ftf-iS-Cxg" firstAttribute="centerX" secondItem="pwu-5P-OG8" secondAttribute="centerX" id="a3l-Wm-Z9Q"/>
+                            <constraint firstItem="ef1-5Z-JY3" firstAttribute="centerX" secondItem="pwu-5P-OG8" secondAttribute="centerX" id="bld-iJ-krL"/>
+                            <constraint firstItem="ef1-5Z-JY3" firstAttribute="width" secondItem="Ftf-iS-Cxg" secondAttribute="width" id="cBD-LI-GWT"/>
+                            <constraint firstItem="ef1-5Z-JY3" firstAttribute="centerX" secondItem="Ftf-iS-Cxg" secondAttribute="centerX" id="dB9-N7-oqJ"/>
                             <constraint firstItem="9H9-JV-c6w" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="yV1-Z2-DLF" secondAttribute="trailing" constant="16" id="eDS-oc-kMb"/>
                             <constraint firstItem="9H9-JV-c6w" firstAttribute="bottom" secondItem="yV1-Z2-DLF" secondAttribute="bottom" constant="32" id="fvL-2H-dd4"/>
                             <constraint firstItem="9H9-JV-c6w" firstAttribute="trailing" secondItem="ywk-nG-OcH" secondAttribute="trailing" constant="16" id="ifo-45-KOc"/>
@@ -96,6 +106,7 @@
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="location_lbl" destination="ef1-5Z-JY3" id="iCi-RA-7P2"/>
                         <outlet property="titlelabel" destination="Ftf-iS-Cxg" id="490-ph-t01"/>
                     </connections>
                 </viewController>
@@ -135,15 +146,21 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aEi-SP-Tq4">
                                 <rect key="frame" x="30" y="171" width="260" height="31"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click here to find location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cap-ll-5as">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cap-ll-5as">
                                         <rect key="frame" x="0.0" y="0.0" width="260" height="31"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dYj-7B-fRW">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dYj-7B-fRW">
                                         <rect key="frame" x="0.0" y="0.0" width="260" height="31"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" title="Click here to find location">
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="findLocationbtn:" destination="bV6-V7-aey" eventType="touchUpInside" id="dtK-ea-qiB"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -221,6 +238,8 @@
                         <viewLayoutGuide key="safeArea" id="yLf-Qm-J83"/>
                     </view>
                     <connections>
+                        <outlet property="findLocation_btn" destination="dYj-7B-fRW" id="Z4O-HE-EhC"/>
+                        <outlet property="findLocation_lbl" destination="Cap-ll-5as" id="4sJ-8J-nYO"/>
                         <outlet property="importantSwitch" destination="Wd7-gY-b4h" id="mmI-G0-XUi"/>
                         <outlet property="titleTodoTextField" destination="34t-FS-ETQ" id="dow-IW-vhF"/>
                     </connections>

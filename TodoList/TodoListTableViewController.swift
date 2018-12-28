@@ -29,15 +29,19 @@ class TodoListTableViewController: UITableViewController {
         let homework = ToDo()
         homework.name = "Do Homework"
         homework.important = true
+        homework.location = "Bangkok"
 
         let breakfast = ToDo()
         breakfast.name = "Have Breakfast"
+        breakfast.location = "Karbi"
 
         let lunch = ToDo()
         lunch.name = "Have Lunch"
+        lunch.location = "Chiang Mai"
 
         let dinner = ToDo()
         dinner.name = "Have Dinner"
+        dinner.location = "Lopburi"
         
         
         return [homework , breakfast , lunch , dinner]
