@@ -8,11 +8,14 @@
 
 import UIKit
 import CoreLocation
+import Firebase
 
 
 class AddToDoViewController: UIViewController , UITextFieldDelegate {
     
     var backToDoListVC = TodoListTableViewController()
+    
+    // initialized Firebase Realtime
     
     
     @IBOutlet weak var titleTodoTextField: UITextField!
@@ -33,18 +36,25 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate {
 
     }
     
-    // MARK: - Logic
-    
-    
     @objc func addToDodata() {
         let todo = ToDo()
+        
+        // get time to label
+        
+        let date = Date()
+        let dateformatter = DateFormatter()
+        
+        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+        let result = "Created: " + dateformatter.string(from: date)
         
         if let titleText = titleTodoTextField.text {
             
             todo.name = titleText // ให้ตัวแปร todo มีค่า name = titleTodoTextField
             todo.important = importantSwitch.isOn // ให้ตัวแปร todo มีค่า Boolean = 1
             todo.location = getAddress(from: placemark!)
-
+            todo.create_date = result
+            todo.lat = lat!
+            todo.lng = lng!
             
             backToDoListVC.TodoList.insert(todo, at: 0)// เพิ่มค่าที่ได้จาก todo เข้าแถวแรกของตัวแปร ToDoList
             backToDoListVC.tableView.reloadData() // reload table view
@@ -52,13 +62,14 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate {
             navigationController?.popViewController(animated: true)
             
         }
+        
     }
+    
+    // Hide Keyboard
     
     func hideKeyBoardWhenPressingReturn() {
         titleTodoTextField.resignFirstResponder()
     }
-    
-    // UITextFieldDelegate method
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         hideKeyBoardWhenPressingReturn()
@@ -71,6 +82,8 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate {
     var location: CLLocation?
     var isUpdatingLocation = false
     var lastLocationError: Error?
+    var lat: Double?
+    var lng: Double?
     
     
     
@@ -78,6 +91,8 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate {
         if location != nil {
             if let placemark = placemark {
                 findLocation_lbl.text = getAddress(from: placemark )
+                lat = location?.coordinate.latitude
+                lng = location?.coordinate.longitude
             } else if isPerformingReverseGeocoding {
                 findLocation_lbl.text = "address Not Found"
             } else if lastGeocodingError != nil {
@@ -128,7 +143,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate {
     
     
     
-    // MARK: - Interface
+    // Find Location
     
     @IBAction func findLocationbtn(_ sender: Any) {
         
@@ -218,11 +233,6 @@ extension AddToDoViewController : CLLocationManagerDelegate {
                 }
             }
         }
-        
-        guard let location: CLLocationCoordinate2D = manager.location?.coordinate else {
-            return
-        }
-
     }
 }
 

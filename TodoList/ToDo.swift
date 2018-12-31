@@ -10,7 +10,11 @@ import UIKit
 
 class ToDo {
     var name = ""
+    var create_date = ""
+    var modified_date = ""
     var important = false
     var location = ""
+    var lat: Double = 0.0
+    var lng: Double = 0.0
     
 }

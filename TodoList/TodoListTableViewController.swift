@@ -30,18 +30,31 @@ class TodoListTableViewController: UITableViewController {
         homework.name = "Do Homework"
         homework.important = true
         homework.location = "Bangkok"
+        homework.lat = 13.763246
+        homework.lng = 100.502639
+        homework.create_date = "Create: Dec 15, 2018 15:30:54"
 
         let breakfast = ToDo()
         breakfast.name = "Have Breakfast"
         breakfast.location = "Karbi"
+        breakfast.lat = 8.090206
+        breakfast.lng = 98.905597
+        breakfast.create_date = "Create: Dec 15, 2018 15:31:54"
+        
 
         let lunch = ToDo()
         lunch.name = "Have Lunch"
         lunch.location = "Chiang Mai"
+        lunch.lat = 18.787333
+        lunch.lng = 99.017442
+        lunch.create_date = "Create: Dec 15, 2018 15:32:54"
 
         let dinner = ToDo()
         dinner.name = "Have Dinner"
         dinner.location = "Lopburi"
+        dinner.lat = 14.802822
+        dinner.lng = 100.653714
+        dinner.create_date = "Create: Dec 15, 2018 15:33:54"
         
         
         return [homework , breakfast , lunch , dinner]

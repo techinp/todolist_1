@@ -18,6 +18,9 @@
 		824B76C321C69AAB00A7069F /* AddToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824B76C221C69AAB00A7069F /* AddToDoViewController.swift */; };
 		82A4DC0E21CC1864008CDF74 /* CompleteToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A4DC0D21CC1864008CDF74 /* CompleteToDoViewController.swift */; };
 		82A4DC1021CC5EEA008CDF74 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A4DC0F21CC5EEA008CDF74 /* LoginViewController.swift */; };
+		82A4DC1821DA1F8D008CDF74 /* GoogleMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A4DC1721DA1F8D008CDF74 /* GoogleMapViewController.swift */; };
+		82A4DC1A21DA39BB008CDF74 /* Test1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A4DC1921DA39BB008CDF74 /* Test1ViewController.swift */; };
+		82A4DC1C21DA39CC008CDF74 /* Test2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A4DC1B21DA39CC008CDF74 /* Test2ViewController.swift */; };
 		C4D80A606F2D11A43BD65E6D /* Pods_TodoList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CAAD4DE6FE0B0D86BF4CEBF /* Pods_TodoList.framework */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +40,9 @@
 		824B76C221C69AAB00A7069F /* AddToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoViewController.swift; sourceTree = "<group>"; };
 		82A4DC0D21CC1864008CDF74 /* CompleteToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteToDoViewController.swift; sourceTree = "<group>"; };
 		82A4DC0F21CC5EEA008CDF74 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		82A4DC1721DA1F8D008CDF74 /* GoogleMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapViewController.swift; sourceTree = "<group>"; };
+		82A4DC1921DA39BB008CDF74 /* Test1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test1ViewController.swift; sourceTree = "<group>"; };
+		82A4DC1B21DA39CC008CDF74 /* Test2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test2ViewController.swift; sourceTree = "<group>"; };
 		E6929F79AD1B98D12DDED2E6 /* Pods-TodoList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoList.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TodoList/Pods-TodoList.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,6 +90,9 @@
 			children = (
 				82172B9721C4FB6400EBE497 /* AppDelegate.swift */,
 				82172B9B21C4FB6400EBE497 /* Main.storyboard */,
+				82A4DC1921DA39BB008CDF74 /* Test1ViewController.swift */,
+				82A4DC1B21DA39CC008CDF74 /* Test2ViewController.swift */,
+				82A4DC1721DA1F8D008CDF74 /* GoogleMapViewController.swift */,
 				82A4DC0F21CC5EEA008CDF74 /* LoginViewController.swift */,
 				824B76C221C69AAB00A7069F /* AddToDoViewController.swift */,
 				82172BAF21C5551500EBE497 /* TodoListTableViewController.swift */,
@@ -299,9 +308,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82A4DC1A21DA39BB008CDF74 /* Test1ViewController.swift in Sources */,
 				82A4DC1021CC5EEA008CDF74 /* LoginViewController.swift in Sources */,
 				82172B9821C4FB6400EBE497 /* AppDelegate.swift in Sources */,
+				82A4DC1821DA1F8D008CDF74 /* GoogleMapViewController.swift in Sources */,
 				82172BA021C4FB6400EBE497 /* TodoList.xcdatamodeld in Sources */,
+				82A4DC1C21DA39CC008CDF74 /* Test2ViewController.swift in Sources */,
 				824B76C321C69AAB00A7069F /* AddToDoViewController.swift in Sources */,
 				82A4DC0E21CC1864008CDF74 /* CompleteToDoViewController.swift in Sources */,
 				82172BB021C5551500EBE497 /* TodoListTableViewController.swift in Sources */,

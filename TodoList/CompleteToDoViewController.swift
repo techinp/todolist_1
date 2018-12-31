@@ -13,15 +13,22 @@ class CompleteToDoViewController: UIViewController {
     var backToDoListVC = TodoListTableViewController()
     var selectedToDo = ToDo()
     
+    @IBOutlet weak var lat_lbl: UILabel!
+    @IBOutlet weak var lng_lbl: UILabel!
     @IBOutlet weak var titlelabel: UILabel!
     @IBOutlet weak var location_lbl: UILabel!
     @IBOutlet weak var setTitlePlace_btn: UIButton!
+    @IBOutlet weak var time_lbl: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        time_lbl.text = selectedToDo.create_date
         titlelabel.text = selectedToDo.name
         location_lbl.text = selectedToDo.location
+        lat_lbl.text = String(selectedToDo.lat)
+        lng_lbl.text = String(selectedToDo.lng)
         setTitlePlace_btn.setTitle("", for: .normal)
         
         // navigation right bar button (Complete)
