@@ -15,18 +15,23 @@ class CompleteToDoViewController: UIViewController {
     
     @IBOutlet weak var titlelabel: UILabel!
     @IBOutlet weak var location_lbl: UILabel!
+    @IBOutlet weak var setTitlePlace_btn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         titlelabel.text = selectedToDo.name
         location_lbl.text = selectedToDo.location
+        setTitlePlace_btn.setTitle("", for: .normal)
+        
+        // navigation right bar button (Complete)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Finish", style: .plain, target: self, action: #selector(completeToDo))
 
     }
     
     // MARK: - Logic
     
-    func completeToDo() {
+    @objc func completeToDo() {
         var index = 0
         
         for toDo in backToDoListVC.TodoList {
@@ -41,10 +46,6 @@ class CompleteToDoViewController: UIViewController {
     }
     
     // MARK: - Interface
-    
-    @IBAction func completeToDo(_ sender: Any) {
-        completeToDo()
-    }
     
 
 }
