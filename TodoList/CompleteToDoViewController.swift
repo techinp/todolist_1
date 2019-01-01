@@ -13,6 +13,7 @@ class CompleteToDoViewController: UIViewController {
     var backToDoListVC = TodoListTableViewController()
     var selectedToDo = ToDo()
     
+    @IBOutlet weak var showdetail_textview: UITextView!
     @IBOutlet weak var lat_lbl: UILabel!
     @IBOutlet weak var lng_lbl: UILabel!
     @IBOutlet weak var titlelabel: UILabel!
@@ -27,8 +28,9 @@ class CompleteToDoViewController: UIViewController {
         time_lbl.text = selectedToDo.create_date
         titlelabel.text = selectedToDo.name
         location_lbl.text = selectedToDo.location
-        lat_lbl.text = String(selectedToDo.lat)
-        lng_lbl.text = String(selectedToDo.lng)
+        showdetail_textview.text = selectedToDo.detail
+//        lat_lbl.text = String(selectedToDo.lat)
+//        lng_lbl.text = String(selectedToDo.lng)
         setTitlePlace_btn.setTitle("", for: .normal)
         
         // navigation right bar button (Complete)

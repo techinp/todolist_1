@@ -11,31 +11,144 @@ import CoreLocation
 import Firebase
 
 
-class AddToDoViewController: UIViewController , UITextFieldDelegate {
+class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextViewDelegate {
     
     var backToDoListVC = TodoListTableViewController()
+    
+    var refToDoList: DatabaseReference!
+    
+    
+    // keyboard
+    var oldContentInset = UIEdgeInsets.zero
+    var oldIndicatorInset = UIEdgeInsets.zero
+    var oldOffset = CGPoint.zero
+
     
     // initialized Firebase Realtime
     
     
+    @IBOutlet weak var detail_lbl: UITextView!
     @IBOutlet weak var titleTodoTextField: UITextField!
     @IBOutlet weak var findLocation_lbl: UILabel!
-    @IBOutlet weak var importantSwitch: UISwitch!
     @IBOutlet weak var findLocation_btn: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.hideKeyboardWhenTapAround()
+//        self.hideKeyboardWhenTapAround()
         
         updateUI()
         findLocation_lbl.text = ""
         
+        //Text View
+        placeHolderforTextView()
+        
         // navigation right bar button (add)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addToDodata))
         
+        // Firebase
+        refToDoList = Database.database().reference().child("ToDoList")
 
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        
     }
     
+    
+    //MARK:- Keyboad
+    
+    enum KeyboardState {
+        case unknown
+        case entering
+        case exiting
+    }
+    
+    func keyboardState(for d:[AnyHashable:Any], in v:UIView?) -> (KeyboardState, CGRect?) {
+        var rold = d[UIResponder.keyboardFrameBeginUserInfoKey] as! CGRect
+        var rnew = d[UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+        var ks : KeyboardState = .unknown
+        var newRect : CGRect? = nil
+        if let v = v {
+            let co = UIScreen.main.coordinateSpace
+            rold = co.convert(rold, to:v)
+            rnew = co.convert(rnew, to:v)
+            newRect = rnew
+            if !rold.intersects(v.bounds) && rnew.intersects(v.bounds) {
+                ks = .entering
+            }
+            if rold.intersects(v.bounds) && !rnew.intersects(v.bounds) {
+                ks = .exiting
+            }
+        }
+        return (ks, newRect)
+    }
+    
+    @objc func keyboardShow(_ n:Notification) {
+        let d = n.userInfo!
+        let (state, rnew) = keyboardState(for:d, in:self.detail_lbl)
+        if state == .entering {
+            print("really showing")
+            self.oldContentInset = self.detail_lbl.contentInset
+            self.oldIndicatorInset = self.detail_lbl.scrollIndicatorInsets
+            self.oldOffset = self.detail_lbl.contentOffset
+        }
+        print("show")
+        // no need to scroll, as the scroll view will do it for us
+        // so all we have to do is adjust the inset
+        if let rnew = rnew {
+            let h = rnew.intersection(self.detail_lbl.bounds).height
+            self.detail_lbl.contentInset.bottom = h
+            self.detail_lbl.scrollIndicatorInsets.bottom = h
+        }
+    }
+    
+    @objc func keyboardHide(_ n:Notification) {
+        let d = n.userInfo!
+        let (state, _) = keyboardState(for:d, in:self.detail_lbl)
+        if state == .exiting {
+            print("really hiding")
+            // restore original setup
+            // we _don't_ do this; let the text view position itself
+            // self.scrollView.contentOffset = self.oldOffset
+            self.detail_lbl.scrollIndicatorInsets = self.oldIndicatorInset
+            self.detail_lbl.contentInset = self.oldContentInset
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.detail_lbl.resignFirstResponder()
+        self.titleTodoTextField.resignFirstResponder()
+    }
+    
+    
+    
+    //MARK:- UITextView Delegates
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Write Something Here ..." {
+            textView.text = ""
+            textView.textColor = UIColor.black
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == "" {
+            textView.text = "Write Something Here ..."
+            textView .textColor = UIColor.lightGray
+        }
+    }
+    
+    func placeHolderforTextView() {
+        detail_lbl.text = "Write Something Here ..."
+        detail_lbl.textColor = UIColor.lightGray
+        detail_lbl.returnKeyType = .default
+        detail_lbl.delegate = self
+    }
+    
+    
+    //MARK:- Add data
+   
     @objc func addToDodata() {
         let todo = ToDo()
         
@@ -50,18 +163,39 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate {
         if let titleText = titleTodoTextField.text {
             
             todo.name = titleText // ให้ตัวแปร todo มีค่า name = titleTodoTextField
-            todo.important = importantSwitch.isOn // ให้ตัวแปร todo มีค่า Boolean = 1
             todo.location = getAddress(from: placemark!)
             todo.create_date = result
             todo.lat = lat!
             todo.lng = lng!
+            todo.detail = detail_lbl.text
+            
             
             backToDoListVC.TodoList.insert(todo, at: 0)// เพิ่มค่าที่ได้จาก todo เข้าแถวแรกของตัวแปร ToDoList
             backToDoListVC.tableView.reloadData() // reload table view
             
+            addDataToFIR()
+            
             navigationController?.popViewController(animated: true)
             
         }
+        
+    }
+    
+    //Marl:- Firebase
+    
+    func addDataToFIR() {
+        
+        let key = refToDoList.childByAutoId().key
+        
+        let ToDoNoSQL = ["id": key,
+                         "Title": titleTodoTextField.text! as String,
+                         "Detial": detail_lbl.text! as String,
+                         "Location": getAddress(from: placemark!) as String,
+                         "Latitude:": String(lat!),
+                         "Longitude": String(lng!)
+                         ]
+        
+        refToDoList.child(key).setValue(ToDoNoSQL)
         
     }
     
@@ -236,16 +370,18 @@ extension AddToDoViewController : CLLocationManagerDelegate {
     }
 }
 
-extension UIViewController {
-    func hideKeyboardWhenTapAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.DismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func DismissKeyboard() {
-        view.endEditing(true)
-    }
-}
+// Hide KeyBoard
+
+//extension UIViewController {
+//    func hideKeyboardWhenTapAround() {
+//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.DismissKeyboard))
+//        tap.cancelsTouchesInView = false
+//        view.addGestureRecognizer(tap)
+//    }
+//
+//    @objc func DismissKeyboard() {
+//        view.endEditing(true)
+//    }
+//}
 
 

@@ -28,11 +28,11 @@ class TodoListTableViewController: UITableViewController {
         
         let homework = ToDo()
         homework.name = "Do Homework"
-        homework.important = true
         homework.location = "Bangkok"
         homework.lat = 13.763246
         homework.lng = 100.502639
         homework.create_date = "Create: Dec 15, 2018 15:30:54"
+        homework.detail = "Do Homework at 7pm"
 
         let breakfast = ToDo()
         breakfast.name = "Have Breakfast"
@@ -40,6 +40,7 @@ class TodoListTableViewController: UITableViewController {
         breakfast.lat = 8.090206
         breakfast.lng = 98.905597
         breakfast.create_date = "Create: Dec 15, 2018 15:31:54"
+        breakfast.detail = "Have Breakfasr at 7am"
         
 
         let lunch = ToDo()
@@ -48,6 +49,7 @@ class TodoListTableViewController: UITableViewController {
         lunch.lat = 18.787333
         lunch.lng = 99.017442
         lunch.create_date = "Create: Dec 15, 2018 15:32:54"
+        lunch.detail = "Have lunch at 12pm"
 
         let dinner = ToDo()
         dinner.name = "Have Dinner"
@@ -55,6 +57,7 @@ class TodoListTableViewController: UITableViewController {
         dinner.lat = 14.802822
         dinner.lng = 100.653714
         dinner.create_date = "Create: Dec 15, 2018 15:33:54"
+        dinner.detail = "Have dinner at 6pm"
         
         
         return [homework , breakfast , lunch , dinner]
@@ -77,11 +80,7 @@ class TodoListTableViewController: UITableViewController {
         
         let TodoCell = TodoList[indexPath.row]
         
-        if TodoCell.important {
-            cell.textLabel?.text = TodoCell.name + " 🔴"
-        } else {
-            cell.textLabel?.text = TodoCell.name
-        }
+        cell.textLabel?.text = TodoCell.name
         
         return cell
     }
