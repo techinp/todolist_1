@@ -64,29 +64,29 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         case exiting
     }
     
-    func keyboardState(for d:[AnyHashable:Any], in v:UIView?) -> (KeyboardState, CGRect?) {
-        var rold = d[UIResponder.keyboardFrameBeginUserInfoKey] as! CGRect
-        var rnew = d[UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
-        var ks : KeyboardState = .unknown
+    func keyboardState(for userinfo:[AnyHashable:Any], in view:UIView?) -> (KeyboardState, CGRect?) {
+        var keyboardBegin = userinfo[UIResponder.keyboardFrameBeginUserInfoKey] as! CGRect
+        var keyboardEnd = userinfo[UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+        var keyBState : KeyboardState = .unknown
         var newRect : CGRect? = nil
-        if let v = v {
-            let co = UIScreen.main.coordinateSpace
-            rold = co.convert(rold, to:v)
-            rnew = co.convert(rnew, to:v)
-            newRect = rnew
-            if !rold.intersects(v.bounds) && rnew.intersects(v.bounds) {
-                ks = .entering
+        if let views = view {
+            let coord = UIScreen.main.coordinateSpace
+            keyboardBegin = coord.convert(keyboardBegin, to:views)
+            keyboardEnd = coord.convert(keyboardEnd, to:views)
+            newRect = keyboardEnd
+            if !keyboardBegin.intersects(views.bounds) && keyboardEnd.intersects(views.bounds) {
+                keyBState = .entering
             }
-            if rold.intersects(v.bounds) && !rnew.intersects(v.bounds) {
-                ks = .exiting
+            if keyboardBegin.intersects(views.bounds) && !keyboardEnd.intersects(views.bounds) {
+                keyBState = .exiting
             }
         }
-        return (ks, newRect)
+        return (keyBState, newRect)
     }
     
-    @objc func keyboardShow(_ n:Notification) {
-        let d = n.userInfo!
-        let (state, rnew) = keyboardState(for:d, in:self.detail_lbl)
+    @objc func keyboardShow(_ notifi:Notification) {
+        let userinfo = notifi.userInfo!
+        let (state, keyboardEnd) = keyboardState(for:userinfo, in:self.detail_lbl)
         if state == .entering {
             print("really showing")
             self.oldContentInset = self.detail_lbl.contentInset
@@ -96,16 +96,16 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         print("show")
         // no need to scroll, as the scroll view will do it for us
         // so all we have to do is adjust the inset
-        if let rnew = rnew {
-            let h = rnew.intersection(self.detail_lbl.bounds).height
-            self.detail_lbl.contentInset.bottom = h
-            self.detail_lbl.scrollIndicatorInsets.bottom = h
+        if let keyboardEnd = keyboardEnd {
+            let height = keyboardEnd.intersection(self.detail_lbl.bounds).height
+            self.detail_lbl.contentInset.bottom = height
+            self.detail_lbl.scrollIndicatorInsets.bottom = height
         }
     }
     
-    @objc func keyboardHide(_ n:Notification) {
-        let d = n.userInfo!
-        let (state, _) = keyboardState(for:d, in:self.detail_lbl)
+    @objc func keyboardHide(_ notifi:Notification) {
+        let userinfo = notifi.userInfo!
+        let (state, _) = keyboardState(for:userinfo, in:self.detail_lbl)
         if state == .exiting {
             print("really hiding")
             // restore original setup
