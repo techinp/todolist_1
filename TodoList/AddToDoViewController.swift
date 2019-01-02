@@ -162,12 +162,12 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         
         if let titleText = titleTodoTextField.text {
             
-            todo.name = titleText // ให้ตัวแปร todo มีค่า name = titleTodoTextField
+            todo.titlename = titleText // ให้ตัวแปร todo มีค่า name = titleTodoTextField
             todo.location = getAddress(from: placemark!)
             todo.create_date = result
             todo.lat = lat!
             todo.lng = lng!
-            todo.detail = detail_lbl.text
+            todo.deteil = detail_lbl.text
             
             
             backToDoListVC.TodoList.insert(todo, at: 0)// เพิ่มค่าที่ได้จาก todo เข้าแถวแรกของตัวแปร ToDoList
@@ -185,11 +185,23 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
     
     func addDataToFIR() {
         
+        // get time to label
+        
+        let date = Date()
+        let dateformatter = DateFormatter()
+        
+        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+        let result = "Created: " + dateformatter.string(from: date)
+        
+        //----------------------
+        
         let key = refToDoList.childByAutoId().key
         
         let ToDoNoSQL = ["id": key,
                          "Title": titleTodoTextField.text! as String,
                          "Detial": detail_lbl.text! as String,
+                         "Created": result,
+                         "Modified": "",
                          "Location": getAddress(from: placemark!) as String,
                          "Latitude:": String(lat!),
                          "Longitude": String(lng!)

@@ -26,9 +26,9 @@ class CompleteToDoViewController: UIViewController {
         super.viewDidLoad()
         
         time_lbl.text = selectedToDo.create_date
-        titlelabel.text = selectedToDo.name
+        titlelabel.text = selectedToDo.titlename
         location_lbl.text = selectedToDo.location
-        showdetail_textview.text = selectedToDo.detail
+        showdetail_textview.text = selectedToDo.deteil
 //        lat_lbl.text = String(selectedToDo.lat)
 //        lng_lbl.text = String(selectedToDo.lng)
         setTitlePlace_btn.setTitle("", for: .normal)
@@ -44,7 +44,7 @@ class CompleteToDoViewController: UIViewController {
         var index = 0
         
         for toDo in backToDoListVC.TodoList {
-            if toDo.name == selectedToDo.name {
+            if toDo.titlename == selectedToDo.titlename {
                 backToDoListVC.TodoList.remove(at: index)
                 backToDoListVC.tableView.reloadData()
                 navigationController?.popViewController(animated: true)

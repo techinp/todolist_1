@@ -26,38 +26,40 @@ class TodoListTableViewController: UITableViewController {
     
     func createTodo() -> [ToDo] {
         
+        
         let homework = ToDo()
-        homework.name = "Do Homework"
+        
+        homework.titlename = "Do Homework"
         homework.location = "Bangkok"
         homework.lat = 13.763246
         homework.lng = 100.502639
         homework.create_date = "Create: Dec 15, 2018 15:30:54"
-        homework.detail = "Do Homework at 7pm"
+        homework.deteil = "Do Homework at 7pm"
 
         let breakfast = ToDo()
-        breakfast.name = "Have Breakfast"
+        breakfast.titlename = "Have Breakfast"
         breakfast.location = "Karbi"
         breakfast.lat = 8.090206
         breakfast.lng = 98.905597
         breakfast.create_date = "Create: Dec 15, 2018 15:31:54"
-        breakfast.detail = "Have Breakfasr at 7am"
+        breakfast.deteil = "Have Breakfasr at 7am"
         
 
         let lunch = ToDo()
-        lunch.name = "Have Lunch"
+        lunch.titlename = "Have Lunch"
         lunch.location = "Chiang Mai"
         lunch.lat = 18.787333
         lunch.lng = 99.017442
         lunch.create_date = "Create: Dec 15, 2018 15:32:54"
-        lunch.detail = "Have lunch at 12pm"
+        lunch.deteil = "Have lunch at 12pm"
 
         let dinner = ToDo()
-        dinner.name = "Have Dinner"
+        dinner.titlename = "Have Dinner"
         dinner.location = "Lopburi"
         dinner.lat = 14.802822
         dinner.lng = 100.653714
         dinner.create_date = "Create: Dec 15, 2018 15:33:54"
-        dinner.detail = "Have dinner at 6pm"
+        dinner.deteil = "Have dinner at 6pm"
         
         
         return [homework , breakfast , lunch , dinner]
@@ -79,8 +81,11 @@ class TodoListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         let TodoCell = TodoList[indexPath.row]
+        let deteillbl = cell.detailTextLabel
+        deteillbl?.textColor = UIColor.lightGray
         
-        cell.textLabel?.text = TodoCell.name
+        cell.textLabel?.text = TodoCell.titlename
+        deteillbl?.text = TodoCell.deteil
         
         return cell
     }
