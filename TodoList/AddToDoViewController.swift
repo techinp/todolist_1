@@ -39,8 +39,11 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         updateUI()
         findLocation_lbl.text = ""
         
+        
         //Text View
         placeHolderforTextView()
+        detail_lbl.layer.borderWidth = 2.0
+        detail_lbl.layer.borderColor = UIColor.orange.cgColor
         
         // navigation right bar button (add)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addToDodata))
@@ -52,6 +55,37 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
+        
+    }
+    
+    //Marl:- Firebase
+    
+    func addDataToFIR() {
+        
+        // get time to label
+        
+        let date = Date()
+        let dateformatter = DateFormatter()
+        
+        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+        let created_time = "Created: " + dateformatter.string(from: date)
+        
+        let modified_time : String = ""
+        //----------------------
+        
+        let key = refToDoList.childByAutoId().key
+        
+        let ToDoNoSQL = ["id": key,
+                         "Title": titleTodoTextField.text! as String,
+                         "Deteil": detail_lbl.text! as String,
+                         "Created": created_time,
+                         "Modified": modified_time,
+                         "Location": getAddress(from: placemark!) as String,
+                         "Latitude:": String(lat!),
+                         "Longitude": String(lng!)
+        ]
+        
+        refToDoList.child(key).setValue(ToDoNoSQL)
         
     }
     
@@ -150,66 +184,44 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
     //MARK:- Add data
    
     @objc func addToDodata() {
-        let todo = ToDo()
+//        let todo = ToDo()
+        
+        addDataToFIR()
+        
+        navigationController?.popViewController(animated: true)
         
         // get time to label
         
-        let date = Date()
-        let dateformatter = DateFormatter()
-        
-        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
-        let result = "Created: " + dateformatter.string(from: date)
-        
-        if let titleText = titleTodoTextField.text {
-            
-            todo.titlename = titleText // ให้ตัวแปร todo มีค่า name = titleTodoTextField
-            todo.location = getAddress(from: placemark!)
-            todo.create_date = result
-            todo.lat = lat!
-            todo.lng = lng!
-            todo.deteil = detail_lbl.text
-            
-            
-            backToDoListVC.TodoList.insert(todo, at: 0)// เพิ่มค่าที่ได้จาก todo เข้าแถวแรกของตัวแปร ToDoList
-            backToDoListVC.tableView.reloadData() // reload table view
-            
-            addDataToFIR()
-            
-            navigationController?.popViewController(animated: true)
-            
-        }
+       /*  Add to Core Data
+//        let date = Date()
+//        let dateformatter = DateFormatter()
+//
+//        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+//        let result = "Created: " + dateformatter.string(from: date)
+//
+//        if let titleText = titleTodoTextField.text {
+//
+//            todo.titlename = titleText // ให้ตัวแปร todo มีค่า name = titleTodoTextField
+//            todo.location = getAddress(from: placemark!)
+//            todo.create_date = result
+//            todo.lat = lat!
+//            todo.lng = lng!
+//            todo.deteil = detail_lbl.text
+//
+//
+//            backToDoListVC.TodoList.insert(todo, at: 0)// เพิ่มค่าที่ได้จาก todo เข้าแถวแรกของตัวแปร ToDoList
+//            backToDoListVC.tableView.reloadData() // reload table view
+//
+//            addDataToFIR()
+//
+//            navigationController?.popViewController(animated: true)
+//
+//        }
+        */
         
     }
     
-    //Marl:- Firebase
     
-    func addDataToFIR() {
-        
-        // get time to label
-        
-        let date = Date()
-        let dateformatter = DateFormatter()
-        
-        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
-        let result = "Created: " + dateformatter.string(from: date)
-        
-        //----------------------
-        
-        let key = refToDoList.childByAutoId().key
-        
-        let ToDoNoSQL = ["id": key,
-                         "Title": titleTodoTextField.text! as String,
-                         "Detial": detail_lbl.text! as String,
-                         "Created": result,
-                         "Modified": "",
-                         "Location": getAddress(from: placemark!) as String,
-                         "Latitude:": String(lat!),
-                         "Longitude": String(lng!)
-                         ]
-        
-        refToDoList.child(key).setValue(ToDoNoSQL)
-        
-    }
     
     // Hide Keyboard
     
