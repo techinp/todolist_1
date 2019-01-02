@@ -11,10 +11,20 @@ import Firebase
 
 class CompleteToDoViewController: UIViewController {
     
-    var ShowDeteil: String?
     
     var destinationShow = [ToDo]()
     var showdata : ToDo?
+    var desComplete = TodoListTableViewController()
+    var ref : DatabaseReference?
+    var TitleName: String?
+    var Created_Date: String?
+    var Location: String?
+    var Deteil: String?
+    
+
+    
+
+
         
         
 //    let selectedToDo : ToDo = []
@@ -31,6 +41,13 @@ class CompleteToDoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        pullDataFIR()
+        
+        showdetail_textview.layer.borderWidth = 2.0
+        showdetail_textview.layer.borderColor = UIColor.orange.cgColor
+        
+        location_lbl.textColor = UIColor.gray
+        
 //        time_lbl.text = selectedToDo.create_date
 //        titlelabel.text = selectedToDo.titlename
 //        location_lbl.text = selectedToDo.location
@@ -42,16 +59,25 @@ class CompleteToDoViewController: UIViewController {
         // navigation right bar button (Complete)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Finish", style: .plain, target: self, action: #selector(completeToDo))
         
-        Database.database().reference().child("ToDoList").observeSingleEvent(of: .value) { (snapshot) in
-            if let dic = snapshot.value as? [String: AnyObject] {
-                self.titlelabel.text = dic["Title"] as? String
-            }
-        }
-        
+//        Database.database().reference().child("ToDoList").observeSingleEvent(of: .value) { (snapshot) in
+//            if let dic = snapshot.value as? [String: AnyObject] {
+//                self.titlelabel.text = dic["Title"] as? String
+//                self.time_lbl.text = dic["Created"] as? String
+//                self.location_lbl.text = dic["Location"] as? String
+//            }
+//        }
 
     }
     
+    
     // MARK: - Logic
+    
+    func pullDataFIR() {
+        titlelabel.text = TitleName
+        time_lbl.text = Created_Date
+        location_lbl.text = Location
+        showdetail_textview.text = Deteil
+    }
     
     @objc func completeToDo() {
 //        let selectedToDo : ToDo

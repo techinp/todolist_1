@@ -13,17 +13,10 @@ class TodoListTableViewController: UITableViewController {
 
     var ToDoList = [ToDo]()
     var refToDoList: DatabaseReference!
-    var refHandle: UInt!
-    
-   
-        
-
-    
+    var refHandle: DatabaseHandle!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        TodoList = createTodo()
         
         refToDoList = Database.database().reference()
         
@@ -50,6 +43,7 @@ class TodoListTableViewController: UITableViewController {
                 self.ToDoList.insert(ToDo(id: id as? String, titlename: title as? String, deteil: deteil as? String, create_date: created as? String, location: location as? String, lat: lat as? Double, lng: lng as? Double), at: 0)
                 
                 self.tableView.reloadData()
+                self.refToDoList.keepSynced(true)
             }
         })
     }
@@ -81,8 +75,13 @@ class TodoListTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let TodoCell = ToDoList[indexPath.row]
-        performSegue(withIdentifier: "showdisplayToDo", sender: self)
+        let TodoCell = ToDoList[indexPath.row]
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "Show") as? CompleteToDoViewController
+        vc?.TitleName = TodoCell.titlename
+        vc?.Created_Date = TodoCell.create_date
+        vc?.Location = TodoCell.location
+        vc?.Deteil = TodoCell.deteil
+        self.show(vc!, sender: self)
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -98,47 +97,5 @@ class TodoListTableViewController: UITableViewController {
         }
     }
     
-    
-    
-    // MARK: - Segue
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "showdisplayToDo" {
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                let destinationController = segue.destination as! CompleteToDoViewController
-                destinationController.destinationShow = [self.ToDoList[indexPath.row]]
-            }
-        }
-        
-        
-        
-//        if segue.identifier == "showdisplayToDo" {
-//            if let indexPath = self.tableView.indexPathForSelectedRow {
-//                let show = ToDoList[indexPath.row] as! [String: AnyObject]
-//                let showDeteil = show["id"] as? String
-//                let controller = segue.destination as! CompleteToDoViewController
-//                controller.ShowDeteil = showDeteil
-//            }
-//        }
-        
-        //-------------
-        
-//        if let AddToDoVC = segue.destination as? AddToDoViewController {
-//            AddToDoVC.backToDoListVC = self
-//        }
-//
-//        if let showDisplayToDoVC = segue.destination as? CompleteToDoViewController {
-//
-//            if let todo = sender as? ToDo {
-//                showDisplayToDoVC.selectedToDo = todo
-//                showDisplayToDoVC.backToDoListVC = self
-//            }
-//        }
-    }
-    
-    
-
-  
-
 }
+

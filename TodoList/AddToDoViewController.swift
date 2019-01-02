@@ -71,6 +71,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         let created_time = "Created: " + dateformatter.string(from: date)
         
         let modified_time : String = ""
+        
         //----------------------
         
         let key = refToDoList.childByAutoId().key
@@ -184,40 +185,10 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
     //MARK:- Add data
    
     @objc func addToDodata() {
-//        let todo = ToDo()
         
         addDataToFIR()
         
         navigationController?.popViewController(animated: true)
-        
-        // get time to label
-        
-       /*  Add to Core Data
-//        let date = Date()
-//        let dateformatter = DateFormatter()
-//
-//        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
-//        let result = "Created: " + dateformatter.string(from: date)
-//
-//        if let titleText = titleTodoTextField.text {
-//
-//            todo.titlename = titleText // ให้ตัวแปร todo มีค่า name = titleTodoTextField
-//            todo.location = getAddress(from: placemark!)
-//            todo.create_date = result
-//            todo.lat = lat!
-//            todo.lng = lng!
-//            todo.deteil = detail_lbl.text
-//
-//
-//            backToDoListVC.TodoList.insert(todo, at: 0)// เพิ่มค่าที่ได้จาก todo เข้าแถวแรกของตัวแปร ToDoList
-//            backToDoListVC.tableView.reloadData() // reload table view
-//
-//            addDataToFIR()
-//
-//            navigationController?.popViewController(animated: true)
-//
-//        }
-        */
         
     }
     
