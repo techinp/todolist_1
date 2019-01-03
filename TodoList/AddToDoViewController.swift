@@ -29,7 +29,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
     
     @IBOutlet weak var detail_lbl: UITextView!
     @IBOutlet weak var titleTodoTextField: UITextField!
-    @IBOutlet weak var findLocation_lbl: UILabel!
+    @IBOutlet weak var Location_lbl: UILabel!
     @IBOutlet weak var findLocation_btn: UIButton!
 
     override func viewDidLoad() {
@@ -37,7 +37,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
 //        self.hideKeyboardWhenTapAround()
         
         updateUI()
-        findLocation_lbl.text = ""
+        Location_lbl.text = ""
         
         
         //Text View
@@ -58,7 +58,33 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         
     }
     
-    //Marl:- Firebase
+    //MARK:- Add data
+    
+    @objc func addToDodata() {
+        
+        needHaveTextToAdd()
+        
+        navigationController?.popViewController(animated: true)
+        
+    }
+    
+//    func getCoreData() {
+//
+//        // get time to label
+//
+//        let date = Date()
+//        let dateformatter = DateFormatter()
+//
+//        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+//        let created_time = "Created: " + dateformatter.string(from: date)
+//
+//        let todo = ToDo(id: "", titlename: titleTodoTextField.text, deteil: detail_lbl.text, create_date: created_time, location: getAddress(from: placemark!), lat: lat, lng: lng)
+//
+//        backToDoListVC.ToDoList.insert(todo, at: 0)
+//
+//    }
+    
+    //MARK:- Firebase
     
     func addDataToFIR() {
         
@@ -70,8 +96,6 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
         let created_time = "Created: " + dateformatter.string(from: date)
         
-        let modified_time : String = ""
-        
         //----------------------
         
         let key = refToDoList.childByAutoId().key
@@ -80,16 +104,35 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
                          "Title": titleTodoTextField.text! as String,
                          "Deteil": detail_lbl.text! as String,
                          "Created": created_time,
-                         "Modified": modified_time,
                          "Location": getAddress(from: placemark!) as String,
-                         "Latitude:": String(lat!),
+                         "Latitude": String(lat!),
                          "Longitude": String(lng!)
         ]
         
         refToDoList.child(key).setValue(ToDoNoSQL)
         
+        print("this Lat : " + "\(lat!)")
+        print("this Lat : " + "\(lng!)")
+
+        
     }
     
+    func needHaveTextToAdd() {
+        if titleTodoTextField.text == "" || Location_lbl.text == "" || detail_lbl.text == "" {
+            alertDismiss()
+        }
+        else {
+            addDataToFIR()
+//            getCoreData()
+        }
+    }
+    
+    func alertDismiss() {
+        let alert = UIAlertController(title: "Oops!", message: "Please fill up this form", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+    }
     
     //MARK:- Keyboad
     
@@ -181,19 +224,6 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         detail_lbl.delegate = self
     }
     
-    
-    //MARK:- Add data
-   
-    @objc func addToDodata() {
-        
-        addDataToFIR()
-        
-        navigationController?.popViewController(animated: true)
-        
-    }
-    
-    
-    
     // Hide Keyboard
     
     func hideKeyBoardWhenPressingReturn() {
@@ -219,38 +249,39 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
     func updateUI() {
         if location != nil {
             if let placemark = placemark {
-                findLocation_lbl.text = getAddress(from: placemark )
+                Location_lbl.text = getAddress(from: placemark )
                 lat = location?.coordinate.latitude
                 lng = location?.coordinate.longitude
+               
             } else if isPerformingReverseGeocoding {
-                findLocation_lbl.text = "address Not Found"
+                Location_lbl.text = "address Not Found"
             } else if lastGeocodingError != nil {
-                findLocation_lbl.text = "Error finding a valid address."
+                Location_lbl.text = "Error finding a valid address."
             } else {
-                findLocation_lbl.text = "Searching for address..."
+                Location_lbl.text = "Searching for address..."
             }
         } else {
-            findLocation_lbl.text = "Click here to find location"
+            Location_lbl.text = "Click here to find location"
         }
     }
     
     
     func getAddress(from placemark: CLPlacemark) -> String {
-        var line1 = ""
-        if let throughface = placemark.thoroughfare {
-            line1 += throughface + " "
+        var location_placeMark = ""
+        if let name = placemark.name {
+            location_placeMark += name + " "
         }
         if let subLocality = placemark.subLocality {
-            line1 += subLocality + " "
+            location_placeMark += subLocality + " > "
         }
         if let province = placemark.administrativeArea {
-            line1 += province + " "
+            location_placeMark += province + " "
         }
         if let postcode = placemark.postalCode {
-            line1 += postcode + " "
+            location_placeMark += postcode + " "
         }
     
-        return line1
+        return location_placeMark
     }
     
     
