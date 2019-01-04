@@ -22,10 +22,59 @@ class TodoListTableViewController: UITableViewController {
         refToDoList = Database.database().reference()
         
         loadTodoList()
+
+        setupNavigationBar()
+        
+        
+        let red = hexStringToUIColor(hex: "#e74c3c")
+        navigationController?.navigationBar.tintColor = red
+        
+        let add_icon = UIImage(named: "Add.png")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: add_icon, style: .plain, target: self, action: #selector(gotoAddVC))
+        
+        let delete_icon = UIImage(named: "Delete.png")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: delete_icon, style: .plain, target: self, action: nil)
         
     }
     
     // MARK: - Logic
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    @objc func gotoAddVC() {
+        let addVC = self.storyboard?.instantiateViewController(withIdentifier: "AddVC") as? AddToDoViewController
+        self.show(addVC!, sender: self)
+    }
+    
+    
+    func setupNavigationBar() {
+        
+        if #available(iOS 11.0, *) {
+            navigationController?.navigationBar.prefersLargeTitles = true
+        } else {
+
+        }
+    }
 
     
     func loadTodoList() {
@@ -68,26 +117,34 @@ class TodoListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return ToDoList.count
     }
-    
-    
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         let TodoCell : ToDoModel
+
         TodoCell = ToDoList[indexPath.row ]
+        let textlbl = cell.textLabel
+        textlbl?.textColor = UIColor.black
+        textlbl?.font = UIFont(name: "system", size: 20)
         let deteillbl = cell.detailTextLabel
         deteillbl?.textColor = UIColor.lightGray
+        deteillbl?.font = UIFont(name: "system", size: 16)
         
-        cell.textLabel?.text = TodoCell.titlename
-        cell.detailTextLabel?.text = TodoCell.deteil
+        
+        textlbl?.text = TodoCell.titlename
+        deteillbl?.text = TodoCell.deteil
+        
+        
+//        cell.textLabel?.text = TodoCell.titlename
+//        cell.detailTextLabel?.text = TodoCell.deteil
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let TodoCell = ToDoList[indexPath.row]
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "Show") as? CompleteToDoViewController
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ShowVC") as? CompleteToDoViewController
         vc?.TitleName = TodoCell.titlename
         vc?.Created_Date = TodoCell.create_date
         vc?.Location = TodoCell.location

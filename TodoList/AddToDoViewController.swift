@@ -46,9 +46,16 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         detail_lbl.layer.borderColor = UIColor.orange.cgColor
         
         // navigation right bar button (add)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addToDodata))
+        let save_icon = UIImage(named: "Save.png")
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: save_icon, style: .plain, target: self, action: #selector(addToDodata))
         
-        // Firebase
+        // Navigation
+        if #available(iOS 11.0, *) {
+            setupNavigationBar()
+        } else {
+            // Fallback on earlier versions
+        }
+        
         refToDoList = Database.database().reference().child("ToDoList")
 
 
@@ -56,6 +63,12 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         
+    }
+    
+    
+    @available(iOS 11.0, *)
+    func setupNavigationBar() {
+        navigationItem.largeTitleDisplayMode = .never
     }
     
     //MARK:- Add data
@@ -272,7 +285,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
             location_placeMark += name + " "
         }
         if let subLocality = placemark.subLocality {
-            location_placeMark += subLocality + " > "
+            location_placeMark += subLocality + " "
         }
         if let province = placemark.administrativeArea {
             location_placeMark += province + " "

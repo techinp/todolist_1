@@ -42,27 +42,66 @@ class CompleteToDoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        
+
         pullDataFIR()
         
         showdetail_textview.layer.borderWidth = 2.0
         showdetail_textview.layer.borderColor = UIColor.orange.cgColor
         location_lbl.textColor = UIColor.gray
         
-        // https://www.google.com/maps/search/?api=1&query=47.5951518,-122.3316393
+//        let red = hexStringToUIColor(hex: "#e74c3c")
+//        navigationController?.navigationBar.tintColor = red
 
-//        Alarmofirepull()
+        
         
         
 //        setTitlePlace_btn.setTitle("", for: .normal)
         
         // navigation right bar button (Complete)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Finish", style: .plain, target: self, action: #selector(completeToDo))
+        
+        
+        let complete_icon = UIImage(named: "Checkmark.png")
+        
+//        let complete_titleimage = UIImageView(image: complete_icon)
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Finish", style: .plain, target: self, action: #selector(completeToDo))
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: complete_icon, style: .plain, target: self, action: #selector(completeToDo))
+        
+        if #available(iOS 11.0, *) {
+            setupNavigationBar()
+        } else {
+            // Fallback on earlier versions
+        }
         
 
+    }
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
+    
+    
+    @available(iOS 11.0, *)
+    func setupNavigationBar() {
+        navigationItem.largeTitleDisplayMode = .never
     }
     
     @IBAction func opengg(_ sender: Any) {
@@ -76,28 +115,19 @@ class CompleteToDoViewController: UIViewController {
         let string = "https://www.google.com/maps/search/?api=1&query=\(String(Latitude!)),\(String(Longitude!))"
         let encoded = string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: encoded)!
-        UIApplication.shared.open(url)
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url)
+        } else {
+            // Fallback on earlier versions
+            UIApplication.shared.openURL(url)
+        }
     }
 
     // MARK: - Logic
     
-//    func Alarmofirepull() {
-//        Alamofire.request("https://httpbin.org/get").responseJSON { response in
-//            print("Request: \(String(describing: response.request))")   // original url request
-//            print("Response: \(String(describing: response.response))") // http url response
-//            print("Result: \(response.result)")                         // response serialization result
-//            
-//            if let json = response.result.value {
-//                print("JSON: \(json)") // serialized json response
-//            }
-//            
-//            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-//                print("Data: \(utf8Text)") // original server data as UTF8 string
-//            }
-//        }
-//    }
-    
     func pullDataFIR() {
+        let red = hexStringToUIColor(hex: "#e74c3c")
+
         titlelabel.text = TitleName
         time_lbl.text = Created_Date
         location_lbl.text = Location
