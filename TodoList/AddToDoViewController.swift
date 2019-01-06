@@ -37,8 +37,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
 //        self.hideKeyboardWhenTapAround()
         
         updateUI()
-        Location_lbl.text = ""
-        
+        Location_lbl.text = ""        
         
         //Text View
         placeHolderforTextView()
@@ -122,7 +121,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
                          "Longitude": String(lng!)
         ]
         
-        refToDoList.child(key).setValue(ToDoNoSQL)
+        refToDoList.child(key!).setValue(ToDoNoSQL)
         
         print("this Lat : " + "\(lat!)")
         print("this Lat : " + "\(lng!)")

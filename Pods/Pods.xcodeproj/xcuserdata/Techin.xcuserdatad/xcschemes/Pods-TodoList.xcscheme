@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1010"
+   LastUpgradeVersion = "0930"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A9600956B885FCB32A3419041A97CF6C"
+               BlueprintIdentifier = "068C0D1C19508E6664FDE74D438E5114"
                BuildableName = "Pods_TodoList.framework"
                BlueprintName = "Pods-TodoList"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A9600956B885FCB32A3419041A97CF6C"
+            BlueprintIdentifier = "068C0D1C19508E6664FDE74D438E5114"
             BuildableName = "Pods_TodoList.framework"
             BlueprintName = "Pods-TodoList"
             ReferencedContainer = "container:Pods.xcodeproj">

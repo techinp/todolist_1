@@ -16,7 +16,11 @@ class CompleteToDoViewController: UIViewController {
     var destinationShow = [ToDoModel]()
     var showdata : ToDoModel?
     var desComplete = TodoListTableViewController()
-    var ref : DatabaseReference?
+    var refToDoList: DatabaseReference!
+    var refHandle: DatabaseHandle!
+
+    // var for recieve data from tableview
+    var Id_FIR: String?
     var TitleName: String?
     var Created_Date: String?
     var Location: String?
@@ -49,22 +53,8 @@ class CompleteToDoViewController: UIViewController {
         showdetail_textview.layer.borderColor = UIColor.orange.cgColor
         location_lbl.textColor = UIColor.gray
         
-//        let red = hexStringToUIColor(hex: "#e74c3c")
-//        navigationController?.navigationBar.tintColor = red
-
-        
-        
-        
-//        setTitlePlace_btn.setTitle("", for: .normal)
-        
-        // navigation right bar button (Complete)
-        
         
         let complete_icon = UIImage(named: "Checkmark.png")
-        
-//        let complete_titleimage = UIImageView(image: complete_icon)
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Finish", style: .plain, target: self, action: #selector(completeToDo))
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: complete_icon, style: .plain, target: self, action: #selector(completeToDo))
         
         if #available(iOS 11.0, *) {
@@ -74,6 +64,32 @@ class CompleteToDoViewController: UIViewController {
         }
         
 
+    }
+    
+    @objc func completeToDo() {
+        
+        refToDoList = Database.database().reference()
+//        refToDoList = Database.database().reference().child("ToDoList")
+//        let key = refToDoList.childByAutoId().key
+        
+//        refToDoList.child(key!).setValue(ToDoNoSQL)
+        print(Id_FIR!)
+        
+        refHandle = refToDoList.child("ToDoList").queryOrderedByKey().observe(.childAdded, with: { (snapshot) in
+            let snapValue_Title = snapshot.value as? NSDictionary
+            let snapValue_Detail = snapshot.value as? NSDictionary
+            let childKey = snapshot.key
+//            let key = self.refToDoList.childByAutoId().key
+
+            if (self.Id_FIR == snapValue_Detail!["id"] as? String) {
+                
+                let ref = Database.database().reference()
+                ref.child("ToDoList").child(childKey).child("Deteil").setValue(self.showdetail_textview.text)
+                
+                
+            }
+        })
+        
     }
     
     func hexStringToUIColor (hex:String) -> UIColor {
@@ -135,20 +151,7 @@ class CompleteToDoViewController: UIViewController {
         
     }
     
-    @objc func completeToDo() {
-//        let selectedToDo : ToDo?
-//        var index = 0
-//
-//        for toDo in desComplete.ToDoList {
-//            if toDo.titlename == selectedToDo!.titlename {
-//                desComplete.ToDoList.remove(at: index)
-//                desComplete.tableView.reloadData()
-//                navigationController?.popViewController(animated: true)
-//                break
-//            }
-//            index += 1
-//        }
-    }
+   
 
     // MARK: - Interface
     

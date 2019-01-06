@@ -16,15 +16,59 @@
 
 #import <Foundation/Foundation.h>
 
-#import "Firestore/Source/Core/FSTTypes.h"
+#include <string>
+
+#import "FIRFirestoreSettings.h"
 #import "Firestore/Source/Local/FSTQueryData.h"
 #include "Firestore/core/src/firebase/firestore/model/document_key.h"
+#include "Firestore/core/src/firebase/firestore/model/types.h"
 
 @protocol FSTQueryCache;
 
 @class FSTLRUGarbageCollector;
 
-extern const FSTListenSequenceNumber kFSTListenSequenceNumberInvalid;
+extern const firebase::firestore::model::ListenSequenceNumber kFSTListenSequenceNumberInvalid;
+
+namespace firebase {
+namespace firestore {
+namespace local {
+
+struct LruParams {
+  static const int64_t CacheSizeUnlimited = -1;
+
+  static LruParams Default() {
+    return LruParams{100 * 1024 * 1024, 10, 1000};
+  }
+
+  static LruParams Disabled() {
+    return LruParams{kFIRFirestoreCacheSizeUnlimited, 0, 0};
+  }
+
+  static LruParams WithCacheSize(int64_t cacheSize) {
+    LruParams params = Default();
+    params.minBytesThreshold = cacheSize;
+    return params;
+  }
+
+  int64_t minBytesThreshold;
+  int percentileToCollect;
+  int maximumSequenceNumbersToCollect;
+};
+
+struct LruResults {
+  static LruResults DidNotRun() {
+    return LruResults{/* didRun= */ false, 0, 0, 0};
+  }
+
+  bool didRun;
+  int sequenceNumbersCollected;
+  int targetsRemoved;
+  int documentsRemoved;
+};
+
+}  // namespace local
+}  // namespace firestore
+}  // namespace firebase
 
 /**
  * Persistence layers intending to use LRU Garbage collection should implement this protocol. This
@@ -41,22 +85,30 @@ extern const FSTListenSequenceNumber kFSTListenSequenceNumberInvalid;
 /**
  * Enumerates all of the outstanding mutations.
  */
-- (void)enumerateMutationsUsingBlock:(void (^)(const firebase::firestore::model::DocumentKey &key,
-                                               FSTListenSequenceNumber sequenceNumber,
-                                               BOOL *stop))block;
+- (void)enumerateMutationsUsingBlock:
+    (void (^)(const firebase::firestore::model::DocumentKey &key,
+              firebase::firestore::model::ListenSequenceNumber sequenceNumber,
+              BOOL *stop))block;
 
 /**
  * Removes all unreferenced documents from the cache that have a sequence number less than or equal
  * to the given sequence number. Returns the number of documents removed.
  */
-- (int)removeOrphanedDocumentsThroughSequenceNumber:(FSTListenSequenceNumber)sequenceNumber;
+- (int)removeOrphanedDocumentsThroughSequenceNumber:
+    (firebase::firestore::model::ListenSequenceNumber)sequenceNumber;
 
 /**
  * Removes all targets that are not currently being listened to and have a sequence number less than
  * or equal to the given sequence number. Returns the number of targets removed.
  */
-- (int)removeTargetsThroughSequenceNumber:(FSTListenSequenceNumber)sequenceNumber
+- (int)removeTargetsThroughSequenceNumber:
+           (firebase::firestore::model::ListenSequenceNumber)sequenceNumber
                               liveQueries:(NSDictionary<NSNumber *, FSTQueryData *> *)liveQueries;
+
+- (size_t)byteSize;
+
+/** Returns the number of targets and orphaned documents cached. */
+- (int32_t)sequenceNumberCount;
 
 /** Access to the underlying LRU Garbage collector instance. */
 @property(strong, nonatomic, readonly) FSTLRUGarbageCollector *gc;
@@ -69,8 +121,11 @@ extern const FSTListenSequenceNumber kFSTListenSequenceNumberInvalid;
  */
 @interface FSTLRUGarbageCollector : NSObject
 
-- (instancetype)initWithQueryCache:(id<FSTQueryCache>)queryCache
-                          delegate:(id<FSTLRUDelegate>)delegate;
+- (instancetype)initWithDelegate:(id<FSTLRUDelegate>)delegate
+                          params:(firebase::firestore::local::LruParams)params
+    NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)init NS_UNAVAILABLE;
 
 /**
  * Given a target percentile, return the number of queries that make up that percentage of the
@@ -82,19 +137,27 @@ extern const FSTListenSequenceNumber kFSTListenSequenceNumberInvalid;
 /**
  * Given a number of queries n, return the nth sequence number in the cache.
  */
-- (FSTListenSequenceNumber)sequenceNumberForQueryCount:(NSUInteger)queryCount;
+- (firebase::firestore::model::ListenSequenceNumber)sequenceNumberForQueryCount:
+    (NSUInteger)queryCount;
 
 /**
  * Removes queries that are not currently live (as indicated by presence in the liveQueries map) and
  * have a sequence number less than or equal to the given sequence number.
  */
-- (int)removeQueriesUpThroughSequenceNumber:(FSTListenSequenceNumber)sequenceNumber
+- (int)removeQueriesUpThroughSequenceNumber:
+           (firebase::firestore::model::ListenSequenceNumber)sequenceNumber
                                 liveQueries:(NSDictionary<NSNumber *, FSTQueryData *> *)liveQueries;
 
 /**
  * Removes all unreferenced documents from the cache that have a sequence number less than or equal
  * to the given sequence number. Returns the number of documents removed.
  */
-- (int)removeOrphanedDocumentsThroughSequenceNumber:(FSTListenSequenceNumber)sequenceNumber;
+- (int)removeOrphanedDocumentsThroughSequenceNumber:
+    (firebase::firestore::model::ListenSequenceNumber)sequenceNumber;
+
+- (size_t)byteSize;
+
+- (firebase::firestore::local::LruResults)collectWithLiveTargets:
+    (NSDictionary<NSNumber *, FSTQueryData *> *)liveTargets;
 
 @end

@@ -16,8 +16,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "Firestore/Source/Core/FSTTypes.h"
-
 #include "Firestore/core/src/firebase/firestore/model/document_key_set.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -54,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
                          forID:(int)ID;
 
 /** Clears all references with a given ID. Calls -removeReferenceToKey: for each key removed. */
-- (void)removeReferencesForID:(int)ID;
+- (firebase::firestore::model::DocumentKeySet)removeReferencesForID:(int)ID;
 
 /** Clears all references for all IDs. */
 - (void)removeAllReferences;

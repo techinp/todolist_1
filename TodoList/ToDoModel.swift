@@ -19,6 +19,7 @@ class ToDoModel {
     var lng: Double!
     
     init(id: String? , titlename: String? , deteil: String? , create_date: String? , location: String? , lat: Double? , lng: Double?) {
+        self.id = id
         self.titlename = titlename
         self.deteil = deteil
         self.create_date = create_date

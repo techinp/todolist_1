@@ -9,6 +9,13 @@
 import UIKit
 import Firebase
 
+class ListTableviewCell : UITableViewCell {
+    @IBOutlet weak var title_lbl: UILabel!
+    @IBOutlet weak var detail_lbl: UILabel!
+    @IBOutlet weak var time_lbl: UILabel!
+    
+}
+
 class TodoListTableViewController: UITableViewController {
 
     var ToDoList = [ToDoModel]()
@@ -92,14 +99,8 @@ class TodoListTableViewController: UITableViewController {
                 let lat = dictionary.value(forKey: "Latitude") as? String
                 let lng = dictionary.value(forKey: "Longitude") as? String
                 
-                
                 let DLat = Double(lat!)
                 let Dlng = Double(lng!)
-                
-                
-                print(title!)
-                print(lat!)
-                print(lng!)
                 
                 self.ToDoList.insert(ToDoModel(id: id , titlename: title , deteil: deteil , create_date: created , location: location , lat: DLat, lng: Dlng), at: 0)
                 
@@ -119,25 +120,21 @@ class TodoListTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ListTableviewCell
         
         let TodoCell : ToDoModel
 
         TodoCell = ToDoList[indexPath.row ]
-        let textlbl = cell.textLabel
-        textlbl?.textColor = UIColor.black
-        textlbl?.font = UIFont(name: "system", size: 20)
-        let deteillbl = cell.detailTextLabel
-        deteillbl?.textColor = UIColor.lightGray
-        deteillbl?.font = UIFont(name: "system", size: 16)
+//        let textlbl = cell.textLabel
+//        textlbl?.textColor = UIColor.black
+//        textlbl?.font = UIFont(name: "system", size: 20)
+//        let deteillbl = cell.detailTextLabel
+//        deteillbl?.textColor = UIColor.lightGray
+//        deteillbl?.font = UIFont(name: "system", size: 16)
         
-        
-        textlbl?.text = TodoCell.titlename
-        deteillbl?.text = TodoCell.deteil
-        
-        
-//        cell.textLabel?.text = TodoCell.titlename
-//        cell.detailTextLabel?.text = TodoCell.deteil
+        cell.title_lbl.text = TodoCell.titlename
+        cell.detail_lbl.text = TodoCell.deteil
+        cell.time_lbl.text = TodoCell.create_date
         
         return cell
     }
@@ -145,6 +142,7 @@ class TodoListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let TodoCell = ToDoList[indexPath.row]
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "ShowVC") as? CompleteToDoViewController
+        vc?.Id_FIR = TodoCell.id
         vc?.TitleName = TodoCell.titlename
         vc?.Created_Date = TodoCell.create_date
         vc?.Location = TodoCell.location
@@ -167,6 +165,36 @@ class TodoListTableViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.reloadData()
         }
+    }
+    
+}
+
+extension CALayer {
+    
+    func addBorder(edge: UIRectEdge, color: UIColor, thickness: CGFloat) {
+        
+        let border = CALayer()
+        
+        switch edge {
+        case UIRectEdge.top:
+            border.frame = CGRect(x: 0 , y: 0 , width: 100 , height: thickness) //  width: self.bounds.width
+            break
+        case UIRectEdge.bottom:
+            border.frame = CGRect(x: 0, y: self.frame.width - thickness , width: self.frame.width , height: thickness)
+            break
+        case UIRectEdge.left:
+            border.frame = CGRect(x: 0 ,y: 0 ,width: thickness , height: self.frame.height)
+            break
+        case UIRectEdge.right:
+            border.frame = CGRect(x: self.frame.width - thickness , y: 0 , width: thickness , height: self.frame.height)
+            break
+        default:
+            break
+        }
+        
+        border.backgroundColor = color.cgColor;
+        
+        self.addSublayer(border)
     }
     
 }
