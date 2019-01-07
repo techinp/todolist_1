@@ -36,12 +36,13 @@ class CompleteToDoViewController: UIViewController {
 //    let selectedToDo : ToDo = []
     
     @IBOutlet weak var showdetail_textview: UITextView!
-    @IBOutlet weak var lat_lbl: UILabel!
-    @IBOutlet weak var lng_lbl: UILabel!
-    @IBOutlet weak var titlelabel: UILabel!
+//    @IBOutlet weak var lat_lbl: UILabel!
+//    @IBOutlet weak var lng_lbl: UILabel!
+//    @IBOutlet weak var titlelabel: UILabel!
     @IBOutlet weak var location_lbl: UILabel!
-    @IBOutlet weak var setTitlePlace_btn: UIButton!
+//    @IBOutlet weak var setTitlePlace_btn: UIButton!
     @IBOutlet weak var time_lbl: UILabel!
+    @IBOutlet weak var titleTextField: UITextField!
     
     
     override func viewDidLoad() {
@@ -76,6 +77,16 @@ class CompleteToDoViewController: UIViewController {
     
     func editToDo() {
         
+        // get time to label
+        
+        let date = Date()
+        let dateformatter = DateFormatter()
+        
+        dateformatter.dateFormat = "MMM dd, yyyy HH:mm"//:ss"
+        let modified_time = " / Modified: " + dateformatter.string(from: date)
+        
+        //----------------------
+        
         refToDoList = Database.database().reference()
         
         refHandle = refToDoList.child("ToDoList").queryOrderedByKey().observe(.childAdded, with: { (snapshot) in
@@ -83,13 +94,21 @@ class CompleteToDoViewController: UIViewController {
             let childKey = snapshot.key
             
             if (self.Id_FIR == dictionary!["id"] as? String) {
-                self.refToDoList.child("ToDoList").child(childKey).child("Detail").setValue(self.showdetail_textview.text)
-            
+                
+                if (self.Detail! != self.showdetail_textview.text) || (self.TitleName! != self.titleTextField.text ) {
+                    self.refToDoList.child("ToDoList").child(childKey).child("Title").setValue(self.titleTextField.text)
+                    self.refToDoList.child("ToDoList").child(childKey).child("Detail").setValue(self.showdetail_textview.text)
+                    self.refToDoList.child("ToDoList").child(childKey).child("Modified").setValue(modified_time)
+                    
+//                    print("Data Change")
+                    
+                } else {
+//                     print("Data Not Change")
+                }
             }
         })
         
     }
-    
     
     @available(iOS 11.0, *)
     func setupNavigationBar() {
@@ -119,7 +138,7 @@ class CompleteToDoViewController: UIViewController {
     
     func pullDataFIR() {
 
-        titlelabel.text = TitleName
+        titleTextField.text = TitleName
         time_lbl.text = Created_Date
         location_lbl.text = Location
         showdetail_textview.text = Detail

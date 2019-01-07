@@ -25,6 +25,8 @@ class TodoListTableViewController: UITableViewController {
     var refToDoList: DatabaseReference!
     var refHandle: DatabaseHandle!
     
+    var modified_time: String?
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,6 +101,7 @@ class TodoListTableViewController: UITableViewController {
                 let title = dictionary["Title"] as? String
                 let detail = dictionary["Detail"] as? String
                 let created = dictionary["Created"] as? String
+                let modified = dictionary["Modified"] as? String
                 let location = dictionary["Location"] as? String
                 let lat = dictionary.value(forKey: "Latitude") as? String
                 let lng = dictionary.value(forKey: "Longitude") as? String
@@ -106,7 +109,7 @@ class TodoListTableViewController: UITableViewController {
                 let DLat = Double(lat!)
                 let Dlng = Double(lng!)
                 
-                self.ToDoList.insert(ToDoModel(id: id , titlename: title , detail: detail , create_date: created , location: location , lat: DLat, lng: Dlng), at: 0)
+                self.ToDoList.insert(ToDoModel(id: id , titlename: title , detail: detail , create_date: created , modified_date: modified , location: location , lat: DLat, lng: Dlng), at: 0)
                 
                 self.tableView.reloadData()
             }
@@ -138,7 +141,12 @@ class TodoListTableViewController: UITableViewController {
         
         cell.title_lbl.text = TodoCell.titlename
         cell.detail_lbl.text = TodoCell.detail
-        cell.time_lbl.text = TodoCell.create_date
+        if TodoCell.modified_date != nil {
+            cell.time_lbl.text = "\(String(TodoCell.create_date))\(String(TodoCell.modified_date))"
+        } else {
+            cell.time_lbl.text = TodoCell.create_date
+        }
+//        cell.time_lbl.text = "\(String(TodoCell.create_date)) "// \(String(TodoCell.modified_date))" //+ " \(String(TodoCell.titlename))"
         
         return cell
     }
@@ -153,8 +161,6 @@ class TodoListTableViewController: UITableViewController {
         vc?.Detail = TodoCell.detail
         vc?.Latitude = TodoCell.lat
         vc?.Longitude = TodoCell.lng
-        print(TodoCell.lng)
-        print(TodoCell.lat)
         self.show(vc!, sender: self)
     }
     

@@ -14,15 +14,17 @@ class ToDoModel {
     var titlename: String!
     var detail: String!
     var create_date: String!
+    var modified_date: String!
     var location: String!
     var lat: Double!
     var lng: Double!
     
-    init(id: String? , titlename: String? , detail: String? , create_date: String? , location: String? , lat: Double? , lng: Double?) {
+    init(id: String? , titlename: String? , detail: String? , create_date: String? , modified_date: String? , location: String? , lat: Double? , lng: Double?) {
         self.id = id
         self.titlename = titlename
         self.detail = detail
         self.create_date = create_date
+        self.modified_date = modified_date
         self.location = location
         self.lat = lat
         self.lng = lng
@@ -34,6 +36,7 @@ class ToDoModel {
         titlename = snapshotValue["Title"] as? String
         detail = snapshotValue["Detail"] as? String
         create_date = snapshotValue["Create"] as? String
+        modified_date = snapshotValue["Modified"] as? String
         location = snapshotValue["Location"] as? String
         lat = snapshotValue["Latitude"] as? Double
         lng = snapshotValue["Longitude"] as? Double        

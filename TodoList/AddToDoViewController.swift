@@ -99,7 +99,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         let date = Date()
         let dateformatter = DateFormatter()
         
-        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
+        dateformatter.dateFormat = "MMM dd, yyyy HH:mm"//:ss"
         let created_time = "Created: " + dateformatter.string(from: date)
         
         //----------------------
