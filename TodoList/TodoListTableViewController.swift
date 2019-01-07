@@ -33,6 +33,8 @@ class TodoListTableViewController: UITableViewController {
         
         refToDoList = Database.database().reference()
         
+//        loadTodoList()
+        
         setupNavigationBar()
         
         let red = hexStringToUIColor(hex: "#e74c3c")
@@ -48,10 +50,14 @@ class TodoListTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
+        ToDoList.removeAll()
         loadTodoList()
         self.tableView.reloadData()
     }
+
+
+    
     
     // MARK: - Logic
     
