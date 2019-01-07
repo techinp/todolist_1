@@ -80,23 +80,17 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         
     }
     
-//    func getCoreData() {
-//
-//        // get time to label
-//
-//        let date = Date()
-//        let dateformatter = DateFormatter()
-//
-//        dateformatter.dateFormat = "MMM dd, yyyy HH:mm:ss"
-//        let created_time = "Created: " + dateformatter.string(from: date)
-//
-//        let todo = ToDo(id: "", titlename: titleTodoTextField.text, deteil: detail_lbl.text, create_date: created_time, location: getAddress(from: placemark!), lat: lat, lng: lng)
-//
-//        backToDoListVC.ToDoList.insert(todo, at: 0)
-//
-//    }
-    
     //MARK:- Firebase
+    
+    
+    func needHaveTextToAdd() {
+        if titleTodoTextField.text == "" || Location_lbl.text == "" || detail_lbl.text == "" {
+            alertDismiss()
+        }
+        else {
+            addDataToFIR()
+        }
+    }
     
     func addDataToFIR() {
         
@@ -114,7 +108,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         
         let ToDoNoSQL = ["id": key,
                          "Title": titleTodoTextField.text! as String,
-                         "Deteil": detail_lbl.text! as String,
+                         "Detail": detail_lbl.text! as String,
                          "Created": created_time,
                          "Location": getAddress(from: placemark!) as String,
                          "Latitude": String(lat!),
@@ -129,15 +123,6 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         
     }
     
-    func needHaveTextToAdd() {
-        if titleTodoTextField.text == "" || Location_lbl.text == "" || detail_lbl.text == "" {
-            alertDismiss()
-        }
-        else {
-            addDataToFIR()
-//            getCoreData()
-        }
-    }
     
     func alertDismiss() {
         let alert = UIAlertController(title: "Oops!", message: "Please fill up this form", preferredStyle: .alert)
@@ -146,7 +131,7 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         self.present(alert, animated: true, completion: nil)
     }
     
-    //MARK:- Keyboad
+    // MARK:- Keyboad
     
     enum KeyboardState {
         case unknown

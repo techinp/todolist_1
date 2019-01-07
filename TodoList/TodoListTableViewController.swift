@@ -10,6 +10,8 @@ import UIKit
 import Firebase
 
 class ListTableviewCell : UITableViewCell {
+    
+    
     @IBOutlet weak var title_lbl: UILabel!
     @IBOutlet weak var detail_lbl: UILabel!
     @IBOutlet weak var time_lbl: UILabel!
@@ -17,6 +19,7 @@ class ListTableviewCell : UITableViewCell {
 }
 
 class TodoListTableViewController: UITableViewController {
+    
 
     var ToDoList = [ToDoModel]()
     var refToDoList: DatabaseReference!
@@ -28,10 +31,7 @@ class TodoListTableViewController: UITableViewController {
         
         refToDoList = Database.database().reference()
         
-        loadTodoList()
-
         setupNavigationBar()
-        
         
         let red = hexStringToUIColor(hex: "#e74c3c")
         navigationController?.navigationBar.tintColor = red
@@ -42,6 +42,13 @@ class TodoListTableViewController: UITableViewController {
         let delete_icon = UIImage(named: "Delete.png")
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: delete_icon, style: .plain, target: self, action: nil)
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        loadTodoList()
+        self.tableView.reloadData()
     }
     
     // MARK: - Logic
@@ -87,13 +94,10 @@ class TodoListTableViewController: UITableViewController {
     func loadTodoList() {
         refHandle = refToDoList.child("ToDoList").queryOrderedByKey().observe(.childAdded, with: { (snapshot) in
             if let dictionary = snapshot.value as? NSDictionary {
-                print(dictionary)
-                
-               
-                
+
                 let id = dictionary["id"] as? String
                 let title = dictionary["Title"] as? String
-                let deteil = dictionary["Deteil"] as? String
+                let detail = dictionary["Detail"] as? String
                 let created = dictionary["Created"] as? String
                 let location = dictionary["Location"] as? String
                 let lat = dictionary.value(forKey: "Latitude") as? String
@@ -102,7 +106,7 @@ class TodoListTableViewController: UITableViewController {
                 let DLat = Double(lat!)
                 let Dlng = Double(lng!)
                 
-                self.ToDoList.insert(ToDoModel(id: id , titlename: title , deteil: deteil , create_date: created , location: location , lat: DLat, lng: Dlng), at: 0)
+                self.ToDoList.insert(ToDoModel(id: id , titlename: title , detail: detail , create_date: created , location: location , lat: DLat, lng: Dlng), at: 0)
                 
                 self.tableView.reloadData()
             }
@@ -133,7 +137,7 @@ class TodoListTableViewController: UITableViewController {
 //        deteillbl?.font = UIFont(name: "system", size: 16)
         
         cell.title_lbl.text = TodoCell.titlename
-        cell.detail_lbl.text = TodoCell.deteil
+        cell.detail_lbl.text = TodoCell.detail
         cell.time_lbl.text = TodoCell.create_date
         
         return cell
@@ -146,7 +150,7 @@ class TodoListTableViewController: UITableViewController {
         vc?.TitleName = TodoCell.titlename
         vc?.Created_Date = TodoCell.create_date
         vc?.Location = TodoCell.location
-        vc?.Deteil = TodoCell.deteil
+        vc?.Detail = TodoCell.detail
         vc?.Latitude = TodoCell.lat
         vc?.Longitude = TodoCell.lng
         print(TodoCell.lng)
