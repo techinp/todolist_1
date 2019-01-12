@@ -7,11 +7,11 @@
 //
 
 import UIKit
-import FBSDKCoreKit
-import FBSDKLoginKit
+import FacebookCore
+import FacebookLogin
 import Firebase
 
-class LoginViewController: UIViewController, FBSDKLoginButtonDelegate{
+class LoginViewController: UIViewController {
     
     @IBOutlet weak var btn_Facebook: UIButton!
     
@@ -20,9 +20,19 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        loginWithFacebook()
+        
         setup_btn_Facebook()
         btn_Facebook.addTarget(self, action: #selector(HoldDown), for: .touchDown)
         btn_Facebook.addTarget(self, action: #selector(HoldRelease), for: .touchUpInside)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        let token = AccessToken.current
+//        if  token == nil {
+//            self.performSegue(withIdentifier: "LoginSegue", sender: nil)
+//        }
     }
     
     //MARK: - Logic
@@ -64,42 +74,81 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate{
         
     }
     
+//    func loginWithFacebook() {
+//        //Check for previous Access Token
+//        if let accessToken = AccessToken.current {
+//            //AccessToken was obtained during same session
+//            getAccountDetails(withAccessToken: accessToken)
+//        }
+//        else if let strAuthenticationToken = UserDefaults.standard.string(forKey: "AccessToken_Facebook") {
+//            //A previous access token string was saved so create the required AccessToken object
+//            let accessToken = AccessToken(authenticationToken: strAuthenticationToken)
+//
+//            //Skip Login and directly proceed to get facebook profile data with an AccessToken
+//            getAccountDetails(withAccessToken: accessToken)
+//            self.performSegue(withIdentifier: "LoginSegue", sender: nil)
+//
+//        }
+//        else {
+//            //Access Token was not available so do the normal login flow to obtain the Access Token
+//            handleSignInFacebookWhenTapped()
+//        }
+//    }
+    
     @objc func handleSignInFacebookWhenTapped() {
         
-        let loginManager = FBSDKLoginManager()
-        loginManager.logIn(withReadPermissions: ["public_profile" , "email"], from: self) { (result, error) in
-            if let error = error {
-                print("Failed to Login : \(error.localizedDescription)")
-            } else if (result?.isCancelled)! {
-                print("Facebook login was cancelled.")
-            } else {
-                guard let accessToken = FBSDKAccessToken.current() else {
-                    print("Failed to get access Token")
-                    return
-                }
-                let credential = FacebookAuthProvider.credential(withAccessToken: accessToken.tokenString)
-                
-                Auth.auth().signInAndRetrieveData(with: credential, completion: { (user, error) in
-                    if error != nil {
-                        print("Login error: \(error!.localizedDescription)")
-                    } else {
-                        self.fbLoginSuccess = true
-                        print("Loged in")
-                        self.performSegue(withIdentifier: "LoginSegue", sender: nil)
-                    }
-                })
-            }
+        let loginManager = LoginManager()
+        loginManager.logIn(readPermissions: [.publicProfile , .email], viewController: nil) { (result) in
+            switch result {
+            case .success(grantedPermissions: _, declinedPermissions: _, token: _):
+                print("Successfully Logged in into Facebook...")
+//                let accessToken  = AccessToken.current
+//                //Save Access Token string for silent login purpose later
+//                let strAuthenticationToken = AccessToken.current?.authenticationToken
+//                UserDefaults.standard.set(strAuthenticationToken,
+//                                          forKey: "AccessToken_Facebook")
+//
+//                //Proceed to get facebook profile data
+//                self.getAccountDetails(withAccessToken: accessToken!)
+                self.signInToFirebase()
+            case .failed(let err):
+                print(err)
+            case .cancelled:
+                print("Cancelled")
+             }
         }
     }
     
-    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
-        if error != nil {
-            print(error)
-            return
+//    func getAccountDetails(withAccessToken accessToken: AccessToken) {
+//        let graphRequest: GraphRequest = GraphRequest(graphPath     : "me",
+//                                                      parameters    : ["fields" : "id, name, email"],
+//                                                      accessToken   : accessToken,
+//                                                      httpMethod    : GraphRequestHTTPMethod.GET,
+//                                                      apiVersion    : GraphAPIVersion.defaultVersion)
+//        graphRequest.start { (response, result) in
+//            switch result {
+//            case .success(let resultResponse):
+//                print(resultResponse)
+//                print("0000000000000000000000000000000000000000000000000")
+//            case .failed(let error):
+//                print(error)
+//                print("111111111111111111111111111111111111111111111111")
+//            }
+//        }
+//    }
+    
+    fileprivate func signInToFirebase() {
+        let authenticationToken = AccessToken.current?.authenticationToken
+        let credential = FacebookAuthProvider.credential(withAccessToken: authenticationToken!)
+        Auth.auth().signInAndRetrieveData(with: credential) { (result, error) in
+            if let err = error {
+                print(err)
+                return
+            } else {
+                print("Successfully Logged in into Firebase...")
+                self.performSegue(withIdentifier: "LoginSegue", sender: nil)
+            }
         }
-    }
-    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
-        print("Log Out")
     }
     
     //MARK: - Interface

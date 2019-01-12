@@ -10,13 +10,16 @@ target 'TodoList' do
   pod 'Firebase/Core'
   pod 'Firebase/Database'
   pod 'FirebaseUI'
-  pod 'FBSDKCoreKit', :git => 'https://github.com/facebook/facebook-objc-sdk.git', :branch => 'master'
-  pod 'FBSDKLoginKit'
-  pod 'FBSDKShareKit'
-  pod 'FBSDKPlacesKit'
+#  pod 'FBSDKCoreKit', :git => 'https://github.com/facebook/facebook-objc-sdk.git', :branch => 'master'
+#  pod 'FBSDKLoginKit'
+#  pod 'FBSDKShareKit'
+#  pod 'FBSDKPlacesKit'
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod 'Alamofire'
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
+  pod 'FacebookShare'
 
 
 end

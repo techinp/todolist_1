@@ -12,11 +12,22 @@ PODS:
   - BoringSSL/Implementation (10.0.6):
     - BoringSSL/Interface (= 10.0.6)
   - BoringSSL/Interface (10.0.6)
+  - FacebookCore (0.5.0):
+    - Bolts (~> 1.9)
+    - FBSDKCoreKit (~> 4.37)
+  - FacebookLogin (0.5.0):
+    - Bolts (~> 1.9)
+    - FacebookCore (~> 0.5)
+    - FBSDKCoreKit (~> 4.37)
+    - FBSDKLoginKit (~> 4.37)
+  - FacebookShare (0.5.0):
+    - Bolts (~> 1.9)
+    - FacebookCore (~> 0.5)
+    - FBSDKCoreKit (~> 4.37)
+    - FBSDKShareKit (~> 4.37)
   - FBSDKCoreKit (4.39.1):
     - Bolts (~> 1.9)
   - FBSDKLoginKit (4.39.1):
-    - FBSDKCoreKit
-  - FBSDKPlacesKit (4.39.1):
     - FBSDKCoreKit
   - FBSDKShareKit (4.39.1):
     - FBSDKCoreKit
@@ -189,10 +200,9 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - FBSDKCoreKit (from `https://github.com/facebook/facebook-objc-sdk.git`, branch `master`)
-  - FBSDKLoginKit
-  - FBSDKPlacesKit
-  - FBSDKShareKit
+  - FacebookCore
+  - FacebookLogin
+  - FacebookShare
   - Firebase/Core
   - Firebase/Database
   - FirebaseUI
@@ -204,8 +214,11 @@ SPEC REPOS:
     - Alamofire
     - Bolts
     - BoringSSL
+    - FacebookCore
+    - FacebookLogin
+    - FacebookShare
+    - FBSDKCoreKit
     - FBSDKLoginKit
-    - FBSDKPlacesKit
     - FBSDKShareKit
     - Firebase
     - FirebaseAnalytics
@@ -233,23 +246,15 @@ SPEC REPOS:
     - TwitterCore
     - TwitterKit
 
-EXTERNAL SOURCES:
-  FBSDKCoreKit:
-    :branch: master
-    :git: https://github.com/facebook/facebook-objc-sdk.git
-
-CHECKOUT OPTIONS:
-  FBSDKCoreKit:
-    :commit: 77612b5fa182132de070f92fa1db09f087f4eb5d
-    :git: https://github.com/facebook/facebook-objc-sdk.git
-
 SPEC CHECKSUMS:
   Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
+  FacebookCore: 74288d0add931d361b1596beae787ab72c438249
+  FacebookLogin: ebcf34714a1cb9f0759d9f071cfb01ed500996cf
+  FacebookShare: 963b4bb1124a64a395b1e428163d70b5774116e8
   FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
   FBSDKLoginKit: c3079d9a4db27c492287b1eed7a4272b28cf8a59
-  FBSDKPlacesKit: f5b5e4d1e52cfa7b622891c1fb288cbfe73f3ab9
   FBSDKShareKit: 27d7b982e7b1f4638da2f2b1ab6eba5afc6b5888
   Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
   FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
@@ -277,6 +282,6 @@ SPEC CHECKSUMS:
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: d4fe9efff307c43f7f45c3d862bc76faffbd227f
+PODFILE CHECKSUM: 9ed6ae0e2fc03ff4b88312a1f17b11dfa8a82e47
 
 COCOAPODS: 1.5.3
