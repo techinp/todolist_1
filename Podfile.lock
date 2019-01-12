@@ -12,13 +12,13 @@ PODS:
   - BoringSSL/Implementation (10.0.6):
     - BoringSSL/Interface (= 10.0.6)
   - BoringSSL/Interface (10.0.6)
-  - FBSDKCoreKit (4.39.0):
+  - FBSDKCoreKit (4.39.1):
     - Bolts (~> 1.9)
-  - FBSDKLoginKit (4.39.0):
+  - FBSDKLoginKit (4.39.1):
     - FBSDKCoreKit
-  - FBSDKPlacesKit (4.39.0):
+  - FBSDKPlacesKit (4.39.1):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.39.0):
+  - FBSDKShareKit (4.39.1):
     - FBSDKCoreKit
   - Firebase/Auth (5.15.0):
     - Firebase/CoreOnly
@@ -189,7 +189,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - FBSDKCoreKit
+  - FBSDKCoreKit (from `https://github.com/facebook/facebook-objc-sdk.git`, branch `master`)
   - FBSDKLoginKit
   - FBSDKPlacesKit
   - FBSDKShareKit
@@ -204,7 +204,6 @@ SPEC REPOS:
     - Alamofire
     - Bolts
     - BoringSSL
-    - FBSDKCoreKit
     - FBSDKLoginKit
     - FBSDKPlacesKit
     - FBSDKShareKit
@@ -234,14 +233,24 @@ SPEC REPOS:
     - TwitterCore
     - TwitterKit
 
+EXTERNAL SOURCES:
+  FBSDKCoreKit:
+    :branch: master
+    :git: https://github.com/facebook/facebook-objc-sdk.git
+
+CHECKOUT OPTIONS:
+  FBSDKCoreKit:
+    :commit: 77612b5fa182132de070f92fa1db09f087f4eb5d
+    :git: https://github.com/facebook/facebook-objc-sdk.git
+
 SPEC CHECKSUMS:
   Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
-  FBSDKCoreKit: 1e3981faefab8c88edfaa9eecd94aab02d99a9bc
-  FBSDKLoginKit: 30ba5039a2c53d65a75103889bc2deebdacd5a1f
-  FBSDKPlacesKit: cab3a85d3582a65aadfe72e301d3f7f4a86cc36a
-  FBSDKShareKit: 5a0021c30abb64df9eeba87351dd8a627874543b
+  FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
+  FBSDKLoginKit: c3079d9a4db27c492287b1eed7a4272b28cf8a59
+  FBSDKPlacesKit: f5b5e4d1e52cfa7b622891c1fb288cbfe73f3ab9
+  FBSDKShareKit: 27d7b982e7b1f4638da2f2b1ab6eba5afc6b5888
   Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
   FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
   FirebaseAuth: 02e969ff430e156d99d4cb842d77b806b71ad7bb
@@ -268,6 +277,6 @@ SPEC CHECKSUMS:
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit: 5e4f41d70b9abdb41df5467f52d7aa2c0fd26ebb
 
-PODFILE CHECKSUM: 4ee812dcda82d2954d043c2022babce81eca25ee
+PODFILE CHECKSUM: d4fe9efff307c43f7f45c3d862bc76faffbd227f
 
 COCOAPODS: 1.5.3

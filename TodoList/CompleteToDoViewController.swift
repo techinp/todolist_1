@@ -23,56 +23,61 @@ class CompleteToDoViewController: UIViewController {
     var Id_FIR: String?
     var TitleName: String?
     var Created_Date: String?
+    var Modified_Date: String?
     var Location: String?
     var Detail: String?
     var Latitude: Double?
     var Longitude: Double?
+    var indexP: Int?
+    var path: IndexPath?
     
     // keyboard
     var oldContentInset = UIEdgeInsets.zero
     var oldIndicatorInset = UIEdgeInsets.zero
     var oldOffset = CGPoint.zero
-        
-//    let selectedToDo : ToDo = []
     
+    // OutLet
     @IBOutlet weak var showdetail_textview: UITextView!
-//    @IBOutlet weak var lat_lbl: UILabel!
-//    @IBOutlet weak var lng_lbl: UILabel!
-//    @IBOutlet weak var titlelabel: UILabel!
     @IBOutlet weak var location_lbl: UILabel!
-//    @IBOutlet weak var setTitlePlace_btn: UIButton!
     @IBOutlet weak var time_lbl: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let red = hexStringToUIColor(hex: "#e74c3c")
 
         pullDataFIR()
         
         showdetail_textview.layer.borderWidth = 2.0
-        showdetail_textview.layer.borderColor = UIColor.orange.cgColor
+        showdetail_textview.layer.borderColor = red.cgColor
         location_lbl.textColor = UIColor.gray
         
-        
         let complete_icon = UIImage(named: "Checkmark.png")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: complete_icon, style: .plain, target: self, action: #selector(editData))
+        let complete_action = UIBarButtonItem(image: complete_icon, style: .plain, target: self, action: #selector(editData))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: complete_icon, style: .plain, target: self, action: #selector(editData))
+        let google_maps_icon = UIImage(named: "Googlemaps.png")
+        let google_maps_action = UIBarButtonItem(image: google_maps_icon, style: .plain, target: self, action: #selector(openGoogle))
+        
+        navigationItem.rightBarButtonItems = [complete_action, google_maps_action]
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(image: google_maps_icon, style: .plain, target: self, action: #selector(openGoogle))
         
         if #available(iOS 11.0, *) {
             setupNavigationBar()
         } else {
             // Fallback on earlier versions
         }
-        
-
     }
     
     @objc func editData() {
         
         editToDo()
         
-        navigationController?.popViewController(animated: true)
+        self.desComplete.tableView.reloadRows(at: [self.path!], with: .automatic)
         
+        navigationController?.popViewController(animated: true)
+
     }
     
     func editToDo() {
@@ -92,18 +97,18 @@ class CompleteToDoViewController: UIViewController {
         refHandle = refToDoList.child("ToDoList").queryOrderedByKey().observe(.childAdded, with: { (snapshot) in
             let dictionary = snapshot.value as? NSDictionary
             let childKey = snapshot.key
-            
+
             if (self.Id_FIR == dictionary!["id"] as? String) {
-                
                 if (self.Detail! != self.showdetail_textview.text) || (self.TitleName! != self.titleTextField.text ) {
+                    
+                    print(self.indexP!)
                     self.refToDoList.child("ToDoList").child(childKey).child("Title").setValue(self.titleTextField.text)
                     self.refToDoList.child("ToDoList").child(childKey).child("Detail").setValue(self.showdetail_textview.text)
                     self.refToDoList.child("ToDoList").child(childKey).child("Modified").setValue(modified_time)
                     
-//                    print("Data Change")
-                    
+                    print("Data Change")
                 } else {
-//                     print("Data Not Change")
+                     print("Data Not Change")
                 }
             }
         })
@@ -115,13 +120,13 @@ class CompleteToDoViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
     }
     
-    @IBAction func opengg(_ sender: Any) {
-        openGoogle()
-        print("Open GoogleMap Succesfully")
-
-    }
+//    @IBAction func opengg(_ sender: Any) {
+//        openGoogle()
+//        print("Open GoogleMap Succesfully")
+//
+//    }
     
-    func openGoogle() {
+    @objc func openGoogle() {
         
         let string = "https://www.google.com/maps/search/?api=1&query=\(String(Latitude!)),\(String(Longitude!))"
         let encoded = string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -133,21 +138,52 @@ class CompleteToDoViewController: UIViewController {
             UIApplication.shared.openURL(url)
         }
     }
+    
+    // MARK: - Color
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
+    }
 
     // MARK: - Logic
     
+    var Create_Modified_Date = ""
+    
     func pullDataFIR() {
-
+        
         titleTextField.text = TitleName
-        time_lbl.text = Created_Date
+        if Modified_Date != nil {
+            Create_Modified_Date += Created_Date!
+            Create_Modified_Date += Modified_Date!
+            time_lbl.text = Create_Modified_Date
+            print(Create_Modified_Date)
+
+        } else {
+            time_lbl.text = Created_Date
+            print(Created_Date!)
+        }
         location_lbl.text = Location
         showdetail_textview.text = Detail
         
     }
-   
-
-    // MARK: - Interface
-    
+       
     // MARK:- Keyboad
     
     enum KeyboardState {
@@ -215,3 +251,4 @@ class CompleteToDoViewController: UIViewController {
     
 
 }
+

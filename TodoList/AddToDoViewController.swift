@@ -25,8 +25,6 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
 
     
     // initialized Firebase Realtime
-    
-    
     @IBOutlet weak var detail_lbl: UITextView!
     @IBOutlet weak var titleTodoTextField: UITextField!
     @IBOutlet weak var Location_lbl: UILabel!
@@ -36,13 +34,15 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         super.viewDidLoad()
 //        self.hideKeyboardWhenTapAround()
         
+        let red = hexStringToUIColor(hex: "#e74c3c")
+
         updateUI()
         Location_lbl.text = ""        
         
         //Text View
         placeHolderforTextView()
         detail_lbl.layer.borderWidth = 2.0
-        detail_lbl.layer.borderColor = UIColor.orange.cgColor
+        detail_lbl.layer.borderColor = red.cgColor
         
         // navigation right bar button (add)
         let save_icon = UIImage(named: "Save.png")
@@ -57,11 +57,8 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         
         refToDoList = Database.database().reference().child("ToDoList")
 
-
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        
     }
     
     
@@ -116,10 +113,6 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
         ]
         
         refToDoList.child(key!).setValue(ToDoNoSQL)
-        
-        print("this Lat : " + "\(lat!)")
-        print("this Lat : " + "\(lng!)")
-
         
     }
     
@@ -194,6 +187,30 @@ class AddToDoViewController: UIViewController , UITextFieldDelegate , UITextView
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.detail_lbl.resignFirstResponder()
         self.titleTodoTextField.resignFirstResponder()
+    }
+    
+    //MARK:- Color
+    
+    func hexStringToUIColor (hex:String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt32 = 0
+        Scanner(string: cString).scanHexInt32(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0)
+        )
     }
     
     

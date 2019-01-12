@@ -39,7 +39,7 @@ class TodoListTableViewController: UITableViewController {
         
         let red = hexStringToUIColor(hex: "#e74c3c")
         navigationController?.navigationBar.tintColor = red
-        
+                
         let add_icon = UIImage(named: "Add.png")
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: add_icon, style: .plain, target: self, action: #selector(gotoAddVC))
         
@@ -50,14 +50,11 @@ class TodoListTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+    
         ToDoList.removeAll()
         loadTodoList()
-        self.tableView.reloadData()
+//        self.tableView.reloadData()
     }
-
-
-    
     
     // MARK: - Logic
     
@@ -138,12 +135,6 @@ class TodoListTableViewController: UITableViewController {
         let TodoCell : ToDoModel
 
         TodoCell = ToDoList[indexPath.row ]
-//        let textlbl = cell.textLabel
-//        textlbl?.textColor = UIColor.black
-//        textlbl?.font = UIFont(name: "system", size: 20)
-//        let deteillbl = cell.detailTextLabel
-//        deteillbl?.textColor = UIColor.lightGray
-//        deteillbl?.font = UIFont(name: "system", size: 16)
         
         cell.title_lbl.text = TodoCell.titlename
         cell.detail_lbl.text = TodoCell.detail
@@ -152,7 +143,6 @@ class TodoListTableViewController: UITableViewController {
         } else {
             cell.time_lbl.text = TodoCell.create_date
         }
-//        cell.time_lbl.text = "\(String(TodoCell.create_date)) "// \(String(TodoCell.modified_date))" //+ " \(String(TodoCell.titlename))"
         
         return cell
     }
@@ -163,10 +153,13 @@ class TodoListTableViewController: UITableViewController {
         vc?.Id_FIR = TodoCell.id
         vc?.TitleName = TodoCell.titlename
         vc?.Created_Date = TodoCell.create_date
+        vc?.Modified_Date = TodoCell.modified_date
         vc?.Location = TodoCell.location
         vc?.Detail = TodoCell.detail
         vc?.Latitude = TodoCell.lat
         vc?.Longitude = TodoCell.lng
+        vc?.indexP = indexPath.row
+        vc?.path = indexPath
         self.show(vc!, sender: self)
     }
     
@@ -178,40 +171,9 @@ class TodoListTableViewController: UITableViewController {
         if editingStyle == .delete {
             ToDoList.remove(at: indexPath.row)
             
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            tableView.reloadData()
+            tableView.deleteRows(at: [indexPath], with: .fade)
+//            tableView.reloadData()
         }
     }
     
 }
-
-extension CALayer {
-    
-    func addBorder(edge: UIRectEdge, color: UIColor, thickness: CGFloat) {
-        
-        let border = CALayer()
-        
-        switch edge {
-        case UIRectEdge.top:
-            border.frame = CGRect(x: 0 , y: 0 , width: 100 , height: thickness) //  width: self.bounds.width
-            break
-        case UIRectEdge.bottom:
-            border.frame = CGRect(x: 0, y: self.frame.width - thickness , width: self.frame.width , height: thickness)
-            break
-        case UIRectEdge.left:
-            border.frame = CGRect(x: 0 ,y: 0 ,width: thickness , height: self.frame.height)
-            break
-        case UIRectEdge.right:
-            border.frame = CGRect(x: self.frame.width - thickness , y: 0 , width: thickness , height: self.frame.height)
-            break
-        default:
-            break
-        }
-        
-        border.backgroundColor = color.cgColor;
-        
-        self.addSublayer(border)
-    }
-    
-}
-
